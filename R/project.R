@@ -2,6 +2,7 @@ pride_archive_url <- "http://www.ebi.ac.uk/pride/ws/archive/v2"
 pride_archive_url_dev <- "http://wwwdev.ebi.ac.uk/pride/ws/archive/v2"
 
 MISSING_VALUE <- "Not available"
+MISSING_VALUE_LIST <- list(list( "name" = "Not available", "accession" = "Not available"))
 
 #' ProjectSummaryList represents a PRIDE Archive project collection
 #'
@@ -83,15 +84,19 @@ setClass(
   #        ptm.names with identified.ptm.strings
   #
   #add
-  slots = c(
+    slots = list(
     accession = "character", #good
     project.title = "character", #good
     project.description = "character", #good
+    sample.processing.protocol = "character", #added
+    data.processing.protocol = "character", #added
     publication.date = "POSIXct", #good
-    organisms = "character", #replaced species with organisms
-    organism.parts = "character", #replaced tissues with organism.parts
-    identified.ptm.strings = "character", #replaced ptm.names with identified.ptm.strings
-    instruments = "character", #replaced instrument.names with instruments
+    organisms = "list", #replaced species with organisms
+    organism.parts = "list", #replaced tissues with organism.parts
+    diseases = "list", #added
+    identified.ptm.strings = "list", #replaced ptm.names with identified.ptm.strings
+    instruments = "list", #replaced instrument.names with instruments
+    quantification.methods = "list", #added
     project.tags = "character", #good
     submission.type = "character" #good
   ),
@@ -99,11 +104,15 @@ setClass(
   prototype = list(
     project.title = MISSING_VALUE,
     project.description = MISSING_VALUE,
+    sample.processing.protocol = MISSING_VALUE,
+    data.processing.protocol = MISSING_VALUE,
     publication.date = Sys.time(),
-    organisms = MISSING_VALUE,
-    organism.parts = MISSING_VALUE,
-    identified.ptm.strings = MISSING_VALUE,
-    instruments = MISSING_VALUE,
+    organisms = MISSING_VALUE_LIST,
+    organism.parts = MISSING_VALUE_LIST,
+    diseases = MISSING_VALUE_LIST,
+    identified.ptm.strings = MISSING_VALUE_LIST,
+    instruments = MISSING_VALUE_LIST,
+    quantification.methods = MISSING_VALUE_LIST,
     project.tags = MISSING_VALUE,
     submission.type = MISSING_VALUE
   ),
@@ -120,25 +129,41 @@ setClass(
     if (!is.character(object@project.description) || nchar(object@project.description) == 0 || is.na(object@project.description))
       return("'project description' must be a single valid string")
 
+    # check sample.processing.protocol
+    if (!is.character(object@sample.processing.protocol) || nchar(object@sample.processing.protocol) == 0 || is.na(object@sample.processing.protocol))
+      return (" 'sample processing protocol must be a single valid string' ")
+
+    # check data.processing.protocol
+    if (!is.character(object@data.processing.protocol) || nchar(object@data.processing.protocol) == 0 || is.na(object@data.processing.protocol))
+      return (" 'data processing protocol must be a single valid string' ")
+
     # check publication.date
     if (!is(object@publication.date, "POSIXct") || is.na(object@publication.date))
       return("'publication.date' must be a single valid date")
 
     # check organisms
-    if (!is.character(object@organisms) || 0 %in% nchar(object@organisms) || is.na(object@organisms))
-      return("'organisms' must be a one or multiple valid strings")
+    if (!is.list(object@organisms) || length(object@organisms) == 0 || is.na(object@organisms))
+      return("'organisms' must be a valid list")
 
     # check organism.parts
-    if (!is.character(object@organism.parts) || 0 %in% nchar(object@organism.parts) || is.na(object@organism.parts))
-      return("'organism.parts' must be a one or multiple valid strings")
+    if (!is.list(object@organism.parts) || length(object@organism.parts) == 0 || is.na(object@organism.parts))
+      return("'organism.parts' must be a valid list")
+
+    # check diseases
+    if (!is.list(object@diseases) || length(object@diseases) == 0 || is.na(object@diseases))
+      return("'diseases' must be a valid list")
 
     # check identified.ptm.strings
-    if (!is.character(object@identified.ptm.strings) || 0 %in% nchar(object@identified.ptm.strings) || is.na(object@identified.ptm.strings))
-      return("'identified.ptm.strings' must be a one or multiple valid strings")
+    if (!is.list(object@identified.ptm.strings) || length(object@identified.ptm.strings) == 0 || is.na(object@identified.ptm.strings))
+      return("'identified.ptm.strings' must be a valid list")
 
     # check instruments
-    if (!is.character(object@instruments) || 0 %in% nchar(object@instruments) || is.na(object@instruments))
-      return("'instruments' must be a one or multiple valid strings")
+    if (!is.list(object@instruments) || length(object@instruments) == 0 || is.na(object@instruments))
+      return("'instruments' must be a valid list")
+
+    # check quantification.methods
+    if (!is.list(object@quantification.methods) || length(object@quantification.methods) == 0 || is.na(object@quantification.methods))
+      return("'quantification.methods' must be a valid list")
 
     # check project.tags
     if (!is.character(object@project.tags) || 0 %in% nchar(object@project.tags) || is.na(object@project.tags))
@@ -162,26 +187,33 @@ setClass(
 #' @param instruments the names of the instruments used in the project
 #' @param project.tags the tags for the project
 #' @param submission.type the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE
-#' @export
 ProjectSummary <- function(accession,
                            project.title,
                            project.description,
+                           sample.processing.protocol,
+                           data.processing.protocol,
                            publication.date,
                            organisms,
                            organism.parts,
+                           diseases,
                            identified.ptm.strings,
                            instruments,
+                           quantification.methods,
                            project.tags,
                            submission.type) {
   new("ProjectSummary",
       accession = accession,
       project.title = project.title,
       project.description = project.description,
+      sample.processing.protocol = sample.processing.protocol,
+      data.processing.protocol = data.processing.protocol,
       publication.date = publication.date,
       organisms = organisms,
       organism.parts = organism.parts,
+      diseases = diseases,
       identified.ptm.strings = identified.ptm.strings,
       instruments = instruments,
+      quantification.methods = quantification.methods,
       project.tags = project.tags,
       submission.type = submission.type
   )
@@ -194,15 +226,37 @@ ProjectSummary <- function(accession,
 setMethod("show",
           signature = "ProjectSummary",
           definition = function(object) {
-            cat("An object of class ", class(object), "\n", sep="")
+            cat("An object of class ", class(object), sep="")
             cat(" made public in ", as.character(object@publication.date), "\n", sep="")
             cat("    Accession: ", object@accession, "\n", sep="")
             cat("    Title: ", object@project.title, "\n", sep="")
             cat("    Description: ", object@project.description, "\n", sep="")
-            cat("    Organisms: ", object@organisms, "\n", sep=" ")
-            cat("    Organism Parts: ", object@organism.parts, "\n", sep=" ")
-            cat("    PTMs: ", object@identified.ptm.strings, "\n", sep=" ")
-            cat("    Instruments: ", object@instruments, "\n", sep=" ")
+            cat("    Sample Processing Protocol: ", object@sample.processing.protocol, "\n", sep="")
+            cat("    Data Processing Protocol: ", object@data.processing.protocol, "\n", sep="")
+            for(val in object@organisms){
+              cat("    Organism: ", val$name, "\n", sep="")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
+            for(val in object@organism.parts){
+              cat("    Organism Part: ", val$name, "\n", sep=" ")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
+            for(val in object@diseases){
+              cat("    Disease: ", val$name, "\n", sep="")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
+            for(val in object@identified.ptm.strings){
+              cat("    PTM: ", val$name, "\n", sep=" ")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
+            for(val in object@instruments){
+              cat("    Instrument: ", val$name, "\n", sep=" ")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
+            for(val in object@quantification.methods){
+              cat("    Quantification Method: ", val$name, "\n", sep="")
+              cat("         Accession: ", val$accession, "\n", sep="")
+            }
             cat("    Tags: ", object@project.tags, "\n", sep=" ")
             cat("    Submission type: ", object@submission.type, "\n", sep="")
             invisible(NULL)
@@ -275,6 +329,50 @@ setReplaceMethod("project.description", "ProjectSummary",
                  }
 )
 
+#' Returns a project sample processing protocol
+#'
+#' @param object a ProjectSummary
+#' @return the project sample processing protocol
+#' @author Jose A. Dianes
+#' @export
+setMethod("sample.processing.protocol", "ProjectSummary", function(object) object@sample.processing.protocol)
+
+#' Replaces a project sample processing protocol
+#'
+#' @param object a ProjectSummary
+#' @param value the sample processing protocol
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("sample.processing.protocol", "ProjectSummary",
+                 function(object, value) {
+                   object@sample.processing.protocol <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+#' Returns a project data processing protocol
+#'
+#' @param object a ProjectSummary
+#' @return the project data processing protocol
+#' @author Jose A. Dianes
+#' @export
+setMethod("data.processing.protocol", "ProjectSummary", function(object) object@data.processing.protocol)
+
+#' Replaces a project data processing protocol
+#'
+#' @param object a ProjectSummary
+#' @param value the data processing protocol
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("data.processing.protocol", "ProjectSummary",
+                 function(object, value) {
+                   object@data.processing.protocol <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
 #' Returns a project publication date
 #'
 #' @param object a ProjectSummary
@@ -341,6 +439,29 @@ setReplaceMethod("organism.parts", "ProjectSummary",
                  }
 )
 
+#' Returns a project diseases
+#'
+#' @param object a ProjectSummary
+#' @return the project diseases
+#' @author Jose A. Dianes
+#' @export
+setMethod("diseases", "ProjectSummary", function(object) object@diseases)
+
+#' Replaces a project diseases
+#'
+#' @param object a ProjectSummary
+#' @param value the diseases
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("diseases", "ProjectSummary",
+                 function(object, value) {
+                   object@diseases <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+
 #' Returns a project modification names
 #'
 #' @param object a ProjectSummary
@@ -384,6 +505,29 @@ setReplaceMethod("instruments", "ProjectSummary",
                      return(object)
                  }
 )
+
+#' Returns a project quantification methods
+#'
+#' @param object a ProjectSummary
+#' @return the project quantification methods
+#' @author Jose A. Dianes
+#' @export
+setMethod("quantification.methods", "ProjectSummary", function(object) object@quantification.methods)
+
+#' Replaces a project quantification methods
+#'
+#' @param object a ProjectSummary
+#' @param value the quantification methods
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("quantification.methods", "ProjectSummary",
+                 function(object, value) {
+                   object@quantification.methods <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
 
 #' Returns a project tags
 #'
@@ -429,6 +573,7 @@ setReplaceMethod("submission.type", "ProjectSummary",
                  }
 )
 
+
 format.ProjectSummary <- function(x, ...) paste0(x@accession, ", ", x@title)
 
 #' Returns a ProjectSummary instance from a JSON string representation
@@ -441,53 +586,26 @@ format.ProjectSummary <- function(x, ...) paste0(x@accession, ", ", x@title)
 #' @author Jose A. Dianes
 #' @details TODO
 #' @importFrom rjson fromJSON
-#' @export
 from.json.ProjectSummary <- function(json.object) {
   res <- new("ProjectSummary",
              accession = ifelse(is.null(json.object$accession), MISSING_VALUE, json.object$accession),
-             project.title = ifelse(is.null(json.object$project.title), MISSING_VALUE, json.object$title),
+             project.title = ifelse(is.null(json.object$title), MISSING_VALUE, json.object$title),
              project.description = ifelse(is.null(json.object$projectDescription), MISSING_VALUE, json.object$projectDescription),
+             sample.processing.protocol = ifelse(is.null(json.object$sampleProcessingProtocol) || (length(json.object$sampleProcessingProtocol)==0), MISSING_VALUE, json.object$sampleProcessingProtocol),
+             data.processing.protocol = ifelse(is.null(json.object$dataProcessingProtocol) || (length(json.object$dataProcessingProtocol)==0), MISSING_VALUE, json.object$dataProcessingProtocol),
              publication.date = as.POSIXct(json.object$publicationDate),
-             organisms = ifelse(is.null(json.object$organisms) || (length(json.object$organisms)==0), MISSING_VALUE, json.object$organisms[[1]]$name),
-             organism.parts = ifelse(is.null(json.object$organismParts) || (length(json.object$organismParts)==0), MISSING_VALUE, json.object$organismParts[[1]]$name),
-             identified.ptm.strings = ifelse(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0), MISSING_VALUE, json.object$identifiedPTMStrings[[1]]$name),
-             instruments = ifelse(is.null(json.object$instruments) || (length(json.object$instruments)==0), MISSING_VALUE, json.object$instruments[[1]]$name),
+             organisms = ifelse(is.null(json.object$organisms) || (length(json.object$organisms)==0), MISSING_VALUE_LIST, json.object$organisms),
+             diseases = ifelse(is.null(json.object$diseases) || (length(json.object$diseases)==0), MISSING_VALUE_LIST, json.object$diseases),
+             organism.parts = ifelse(is.null(json.object$organismParts) || (length(json.object$organismParts)==0), MISSING_VALUE_LIST, json.object$organismParts),
+             identified.ptm.strings = ifelse(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0), MISSING_VALUE_LIST, json.object$identifiedPTMStrings),
+             instruments = ifelse(is.null(json.object$instruments) || (length(json.object$instruments)==0), MISSING_VALUE_LIST, json.object$instruments),
+             quantification.methods = ifelse(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0), MISSING_VALUE_LIST, json.object$quantificationMethods),
              project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
              submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType)
   )
 
   return (res)
 }
-
-#' Returns a ProjectSummary instance from a JSON string representation, except
-#' this is specifically for the search function as the JSON is formatted differently
-#'
-#' @param json_str The JSON object
-#' @param file the name of a file to read the json_str from; this can also be a URL. Only one of json_str or file must be supplied.
-#' @param method use the C implementation, or the older slower (and one day to be depricated) R implementation
-#' @param unexpected.escape changed handling of unexpected escaped characters. Handling value should be one of "error", "skip", or "keep"; on unexpected characters issue an error, skip the character, or keep the character
-#' @return The ProjectSummary instance
-#' @author Jose A. Dianes
-#' @details TODO
-#' @importFrom rjson fromJSON
-#' @export
-from.json.compactProjectSummary <- function(json.object) {
-  res <- new("ProjectSummary",
-             accession = ifelse(is.null(json.object$accession), MISSING_VALUE, json.object$accession),
-             project.title = ifelse(is.null(json.object$project.title), MISSING_VALUE, json.object$title),
-             project.description = ifelse(is.null(json.object$projectDescription), MISSING_VALUE, json.object$projectDescription),
-             publication.date = as.POSIXct(json.object$publicationDate),
-             organisms = ifelse(is.null(json.object$organisms) || (length(json.object$organisms)==0), MISSING_VALUE, json.object$organisms),
-             organism.parts = ifelse(is.null(json.object$organismParts) || (length(json.object$organismParts)==0), MISSING_VALUE, json.object$organismParts),
-             identified.ptm.strings = ifelse(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0), MISSING_VALUE, json.object$identifiedPTMStrings),
-             instruments = ifelse(is.null(json.object$instruments) || (length(json.object$instruments)==0), MISSING_VALUE, json.object$instruments),
-             project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
-             submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType)
-  )
-
-  return (res)
-}
-
 
 #' Returns a PRIDE Archive project
 #'
@@ -509,75 +627,9 @@ get.ProjectSummary <- function(accession) {
 #' @details TODO
 #' @importFrom rjson fromJSON
 #' @export
-get.list.ProjectSummary <- function(page.size=10, page.number = 0) {
+list.ProjectSummary <- function(page.size=10, page.number = 0) {
   json.list <- fromJSON(file=paste0(pride_archive_url, "/projects?pageSize=", page.size, "&page=", page.number), method="C")
   project.list <- lapply(json.list[[1]]$projects, function(x) { from.json.ProjectSummary(x)})
-  return(project.list)
-}
-
-#' Returns a series of PRIDE Archive projects
-#' to satisfy a given query. This is actually a
-#' query filtered version of project_list
-#'
-#' @param keywords The query term or terms
-#' @param page.size The maximum number of search results
-#' @param page.number The page of the list
-#' @param sort.direction the direction the list is sorted by
-#' @return The search results in a list of objects
-#' @author Jose A. Dianes
-#' @details TODO
-#' @importFrom rjson fromJSON
-#' @export
-search.list.ProjectSummary <- function(keywords, page.size=10, page.number = 0, sort.direction = "DESC") {
-  q <- ""
-  for(word in keywords){
-    q <- paste0(q, word, "%2C%20")
-  }
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/search/projects?keyword=", q, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
-  project.list <- lapply(json.list[[1]]$compactprojects, function(x) { from.json.compactProjectSummary(x)})
-  return(project.list)
-}
-
-#' Returns a series of PRIDE Archive projects
-#' to satisfy a given query. This is actually a
-#' query filtered version of project_list.
-#' Multiple keywords are matched by AND logic
-#'
-#' @param keywords The query term or terms
-#' @param page.size The maximum number of search results
-#' @param page.number The page of the list
-#' @param sort.direction the direction the list is sorted by
-#' @return The search results in a list of objects
-#' @author Jose A. Dianes
-#' @details TODO
-#' @importFrom rjson fromJSON
-#' @export
-search.list.ProjectSummary.and <- function(keywords, page.size=10, page.number = 0, sort.direction = "DESC"){
-  true.list <- list()
-  for(word in keywords){
-    json.list <- fromJSON(file=paste0(pride_archive_url, "/search/projects?keyword=", word, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
-    project.list <- lapply(json.list[[1]]$compactprojects, function(x) { from.json.compactProjectSummary(x)})
-    if(length(true.list) == 0){
-      true.list <- project.list
-    }
-    true.list <- intersect(true.list, project.list)
-  }
-  return(true.list)
-}
-
-#' Returns similar projects from the project with the given accession
-#'
-#' @param accession Project accession to find similar projects of
-#' @param page.size The size of the pages returned
-#' @param page.number The page to be viewed
-#' @return The list of similar projects
-#' @author Tremayne Booker
-#' @details I dunno
-#' @importFrom rjson fromJSON
-#' @export
-get.similar.projects <- function(accession, page.size = 10, page.number = 0){
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/projects/", accession, "/similarProjects?page=", page.number, "&pageSize=", page.size))
-  project.list <- lapply(json.list[[1]]$compactprojects, function(x) { from.json.compactProjectSummary(x)})
   return(project.list)
 }
 

@@ -58,7 +58,6 @@ setClass(
 #' @param file.type the type of the file. e.g. RAW, PEAK, RESULT and etc
 #' @param file.size the size of the file
 #' @param download.link URL for downloading the file
-#' @export
 FileDetail <- function(project.accession, file.name, file.type, file.size, download.link) {
   new("FileDetail",
       project.accession = project.accession,
@@ -211,7 +210,6 @@ setReplaceMethod("download.link", "FileDetail",
 #' @author Jose A. Dianes
 #' @details TODO
 #' @importFrom rjson fromJSON
-#' @export
 #  removed assay
 #  changed fileType to fileCategory
 #  changed fileSize to fileSizeBytes
@@ -243,7 +241,7 @@ from.json.FileDetail <- function(json.object) {
 #' @details TODO
 #' @importFrom rjson fromJSON
 #' @export
-get.list.project.FileDetail <- function(project.accession) {
+project.FileDetail <- function(project.accession) {
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
   file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   return(file.list)
@@ -268,13 +266,15 @@ search.file.by.name <- function(file.name){
 #' @param project.list the list of projects the user wishes to search the files through
 #' @param keywords the word or words the user is searching for in files
 #' @param and TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR
+#' @param file.size.low is the lower range of file memory size the user can specify
+#' @param file.size.high is the upper range of file memory size the user can specify
 #' @importFrom stringr regex
 #' @importFrom stringr str_detect
 #' @return the project list of successful matches
 #' @author Tremayne Booker
-#' @details i dunno
+#' @details TODO
 #' @export
-search.project.list <- function(project.list, keywords, and = FALSE){
+search.project.list <- function(project.list, keywords, and = FALSE, file.size.low = 0, file.size.high = 999999999){
   if(and){
     return(search.project.list.and(project.list, keywords))
   }
@@ -286,9 +286,11 @@ search.project.list <- function(project.list, keywords, and = FALSE){
     for (file in file.list){
       for (word in keywords){
         if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-          new.project.list <- c(new.project.list, project)
-          success <- TRUE
-          break
+          if(file@file.size >= file.size.low & file@file.size <= file.size.high){
+            new.project.list <- c(new.project.list, project)
+            success <- TRUE
+            break
+          }
         }
       }
       if(success){

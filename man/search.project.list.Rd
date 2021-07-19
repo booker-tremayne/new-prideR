@@ -4,7 +4,13 @@
 \alias{search.project.list}
 \title{Searches a list of projects for keyword matches}
 \usage{
-search.project.list(project.list, keywords, and = FALSE)
+search.project.list(
+  project.list,
+  keywords,
+  and = FALSE,
+  file.size.low = 0,
+  file.size.high = 999999999
+)
 }
 \arguments{
 \item{project.list}{the list of projects the user wishes to search the files through}
@@ -12,6 +18,10 @@ search.project.list(project.list, keywords, and = FALSE)
 \item{keywords}{the word or words the user is searching for in files}
 
 \item{and}{TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR}
+
+\item{file.size.low}{is the lower range of file memory size the user can specify}
+
+\item{file.size.high}{is the upper range of file memory size the user can specify}
 }
 \value{
 the project list of successful matches
@@ -20,7 +30,7 @@ the project list of successful matches
 Searches a list of projects for keyword matches
 }
 \details{
-i dunno
+TODO
 }
 \author{
 Tremayne Booker

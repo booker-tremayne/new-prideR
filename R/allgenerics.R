@@ -23,6 +23,22 @@ if (!isGeneric("project.description<-")) {
   setGeneric("project.description<-", function(object, value) standardGeneric("project.description<-"))
 }
 
+if (!isGeneric("sample.processing.protocol")) {
+  setGeneric("sample.processing.protocol", function(object) standardGeneric("sample.processing.protocol"))
+}
+
+if (!isGeneric("sample.processing.protocol<-")) {
+  setGeneric("sample.processing.protocol<-", function(object, value) standardGeneric("sample.processing.protocol<-"))
+}
+
+if (!isGeneric("data.processing.protocol")) {
+  setGeneric("data.processing.protocol", function(object) standardGeneric("data.processing.protocol"))
+}
+
+if (!isGeneric("data.processing.protocol<-")) {
+  setGeneric("data.processing.protocol<-", function(object, value) standardGeneric("data.processing.protocol<-"))
+}
+
 if (!isGeneric("publication.date")) {
   setGeneric("publication.date", function(object) standardGeneric("publication.date"))
 }
@@ -47,6 +63,14 @@ if (!isGeneric("organism.parts<-")) {
   setGeneric("organism.parts<-", function(object, value) standardGeneric("organism.parts<-"))
 }
 
+if (!isGeneric("diseases")) {
+  setGeneric("diseases", function(object) standardGeneric("diseases"))
+}
+
+if (!isGeneric("diseases<-")) {
+  setGeneric("diseases<-", function(object, value) standardGeneric("diseases<-"))
+}
+
 if (!isGeneric("identified.ptm.strings")) {
   setGeneric("identified.ptm.strings", function(object) standardGeneric("identified.ptm.strings"))
 }
@@ -61,6 +85,14 @@ if (!isGeneric("instruments")) {
 
 if (!isGeneric("instruments<-")) {
   setGeneric("instruments<-", function(object, value) standardGeneric("instruments<-"))
+}
+
+if (!isGeneric("quantification.methods")) {
+  setGeneric("quantification.methods", function(object) standardGeneric("quantification.methods"))
+}
+
+if (!isGeneric("quantification.methods<-")) {
+  setGeneric("quantification.methods<-", function(object, value) standardGeneric("quantification.methods<-"))
 }
 
 if (!isGeneric("project.tags")) {
