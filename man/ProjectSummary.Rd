@@ -8,11 +8,15 @@ ProjectSummary(
   accession,
   project.title,
   project.description,
+  sample.processing.protocol,
+  data.processing.protocol,
   publication.date,
   organisms,
   organism.parts,
+  diseases,
   identified.ptm.strings,
   instruments,
+  quantification.methods,
   project.tags,
   submission.type
 )

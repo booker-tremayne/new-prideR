@@ -193,7 +193,7 @@ compactProjectSummary <- function(accession,
 setMethod("show",
           signature = "compactProjectSummary",
           definition = function(object) {
-            cat("An object of class ", class(object), "\n", sep="")
+            cat("An object of class ", class(object), sep="")
             cat(" made public in ", as.character(object@publication.date), "\n", sep="")
             cat("    Accession: ", object@accession, "\n", sep="")
             cat("    Title: ", object@project.title, "\n", sep="")
@@ -471,15 +471,19 @@ from.json.compactProjectSummary <- function(json.object) {
 #' @details TODO
 #' @importFrom rjson fromJSON
 #' @export
-search.ProjectSummary <- function(keywords, page.size=10, page.number = 0, sort.direction = "DESC", and = FALSE) {
-  if(and){
+search.ProjectSummary <- function(keywords, page.size=10, page.number = 0, sort.direction = "DESC", all = FALSE, filter = "") {
+  if(all){
     search.ProjectSummary.and(keywords, page.size, page.number, sort.direction)
   }
   q <- ""
+  f <- ""
   for(word in keywords){
-    q <- paste0(q, word, "%2C%20")
+    q <- paste0(q, "keyword=", word, "&")
   }
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/search/projects?keyword=", q, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
+  for(word in filter){
+    f <- paste0(f, word, ",")
+  }
+  json.list <- fromJSON(file=paste0(pride_archive_url, "/search/projects?", q, "filter=", f, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
   project.list <- lapply(json.list[[1]]$compactprojects, function(x) { from.json.compactProjectSummary(x)})
   return(project.list)
 }

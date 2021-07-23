@@ -11,7 +11,8 @@ search.ProjectSummary(
   page.size = 10,
   page.number = 0,
   sort.direction = "DESC",
-  and = FALSE
+  all = FALSE,
+  filter = ""
 )
 }
 \arguments{

@@ -282,7 +282,7 @@ search.project.list <- function(project.list, keywords, and = FALSE, file.size.l
   for (project in project.list){
     success <- FALSE
     accession <- project@accession
-    file.list <- get.list.project.FileDetail(accession)
+    file.list <- project.FileDetail(accession)
     for (file in file.list){
       for (word in keywords){
         if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
@@ -316,7 +316,7 @@ search.project.list.and <- function(project.list, keywords){
   for (project in project.list){
     matches <- 0
     accession <- project@accession
-    file.list <- get.list.project.FileDetail(accession)
+    file.list <- project.FileDetail(accession)
 
       for (word in keywords){
         for (file in file.list){

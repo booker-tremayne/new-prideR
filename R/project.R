@@ -233,29 +233,35 @@ setMethod("show",
             cat("    Description: ", object@project.description, "\n", sep="")
             cat("    Sample Processing Protocol: ", object@sample.processing.protocol, "\n", sep="")
             cat("    Data Processing Protocol: ", object@data.processing.protocol, "\n", sep="")
+            cat("    Organism(s): ", "\n", sep="")
             for(val in object@organisms){
-              cat("    Organism: ", val$name, "\n", sep="")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep="")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
+            cat("    Organism Part(s): ", "\n", sep=" ")
             for(val in object@organism.parts){
-              cat("    Organism Part: ", val$name, "\n", sep=" ")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep=" ")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
+            cat("    Disease(s): ", "\n", sep=" ")
             for(val in object@diseases){
-              cat("    Disease: ", val$name, "\n", sep="")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep="")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
+            cat("    PTM(s): ", "\n", sep=" ")
             for(val in object@identified.ptm.strings){
-              cat("    PTM: ", val$name, "\n", sep=" ")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep="")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
+            cat("    Instrument(s): ", "\n", sep=" ")
             for(val in object@instruments){
-              cat("    Instrument: ", val$name, "\n", sep=" ")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep="")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
+            cat("    Quantification Method(s): ", "\n", sep=" ")
             for(val in object@quantification.methods){
-              cat("    Quantification Method: ", val$name, "\n", sep="")
-              cat("         Accession: ", val$accession, "\n", sep="")
+              cat("        ", val$name, sep="")
+              cat("  |  Accession: ", val$accession, "\n", sep="")
             }
             cat("    Tags: ", object@project.tags, "\n", sep=" ")
             cat("    Submission type: ", object@submission.type, "\n", sep="")
@@ -594,12 +600,12 @@ from.json.ProjectSummary <- function(json.object) {
              sample.processing.protocol = ifelse(is.null(json.object$sampleProcessingProtocol) || (length(json.object$sampleProcessingProtocol)==0), MISSING_VALUE, json.object$sampleProcessingProtocol),
              data.processing.protocol = ifelse(is.null(json.object$dataProcessingProtocol) || (length(json.object$dataProcessingProtocol)==0), MISSING_VALUE, json.object$dataProcessingProtocol),
              publication.date = as.POSIXct(json.object$publicationDate),
-             organisms = ifelse(is.null(json.object$organisms) || (length(json.object$organisms)==0), MISSING_VALUE_LIST, json.object$organisms),
-             diseases = ifelse(is.null(json.object$diseases) || (length(json.object$diseases)==0), MISSING_VALUE_LIST, json.object$diseases),
-             organism.parts = ifelse(is.null(json.object$organismParts) || (length(json.object$organismParts)==0), MISSING_VALUE_LIST, json.object$organismParts),
-             identified.ptm.strings = ifelse(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0), MISSING_VALUE_LIST, json.object$identifiedPTMStrings),
-             instruments = ifelse(is.null(json.object$instruments) || (length(json.object$instruments)==0), MISSING_VALUE_LIST, json.object$instruments),
-             quantification.methods = ifelse(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0), MISSING_VALUE_LIST, json.object$quantificationMethods),
+             organisms = if(is.null(json.object$organisms) || (length(json.object$organisms)==0)) MISSING_VALUE_LIST else json.object$organisms,
+             diseases = if(is.null(json.object$diseases) || (length(json.object$diseases)==0)) MISSING_VALUE_LIST else json.object$diseases,
+             organism.parts = if(is.null(json.object$organismParts) || (length(json.object$organismParts)==0)) MISSING_VALUE_LIST else json.object$organismParts,
+             identified.ptm.strings = if(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0)) MISSING_VALUE_LIST else json.object$identifiedPTMStrings,
+             instruments = if(is.null(json.object$instruments) || (length(json.object$instruments)==0)) MISSING_VALUE_LIST else json.object$instruments,
+             quantification.methods = if(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0)) MISSING_VALUE_LIST else json.object$quantificationMethods,
              project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
              submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType)
   )
