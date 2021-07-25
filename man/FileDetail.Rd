@@ -4,7 +4,7 @@
 \alias{FileDetail}
 \title{Constructor for FileDetail}
 \usage{
-FileDetail(project.accession, file.name, file.type, file.size, download.link)
+FileDetail(project.accession, file.name, file.type, file.bytes, download.link)
 }
 \arguments{
 \item{project.accession}{project accession}
@@ -13,7 +13,7 @@ FileDetail(project.accession, file.name, file.type, file.size, download.link)
 
 \item{file.type}{the type of the file. e.g. RAW, PEAK, RESULT and etc}
 
-\item{file.size}{the size of the file}
+\item{file.bytes}{the size of the file}
 
 \item{download.link}{URL for downloading the file}
 }

@@ -79,8 +79,8 @@ get.list.PeptideDetail <- function(page.size = 10){
 #'@details i dunno
 #'@importFrom rjson fromJSON
 #'@export
-get.PeptideDetail.accession <- function(accession){
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/peptideevidences?projectAccession=", accession), method="C")
+get.PeptideDetail.accession <- function(accession, page.size=10, page.number=0, sort.direction = "DESC"){
+  json.list <- fromJSON(file=paste0(pride_archive_url, "/peptideevidences?projectAccession=", accession, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
   peptide.list <- lapply(json.list[[1]]$peptideevidences, function(x) { PeptideDetail(x)})
   return(peptide.list)
 }

@@ -93,7 +93,10 @@ setClass(
     identified.ptm.strings = "character", #replaced ptm.names with identified.ptm.strings
     instruments = "character", #replaced instrument.names with instruments
     project.tags = "character", #good
-    submission.type = "character" #good
+    submission.type = "character", #good
+    lab.PIs = "character", #added
+    submitters = "character", #added
+    affiliations = "character" #added
   ),
 
   prototype = list(
@@ -105,7 +108,10 @@ setClass(
     identified.ptm.strings = MISSING_VALUE,
     instruments = MISSING_VALUE,
     project.tags = MISSING_VALUE,
-    submission.type = MISSING_VALUE
+    submission.type = MISSING_VALUE,
+    lab.PIs = MISSING_VALUE,
+    submitters = MISSING_VALUE,
+    affiliations = MISSING_VALUE
   ),
   validity = function(object) {
     # check accession
@@ -147,6 +153,18 @@ setClass(
     # check submission.type
     if (!is.character(object@submission.type) || nchar(object@submission.type) == 0 || is.na(object@submission.type))
       return("'submission.type' must be a single valid string")
+
+    # check lab.PIs
+    if (!is.character(object@lab.PIs) || is.na(object@lab.PIs))
+      return("'lab.PIs' must be a one or multiple valid strings")
+
+    # check submitters
+    if (!is.character(object@submitters) || is.na(object@submitters))
+      return("'submitters' must be a one or multiple valid strings")
+
+    # check affiliations
+    if (!is.character(object@affiliations) || is.na(object@affiliations))
+      return("'affiliations' must be a one or multiple valid strings")
   }
 )
 
@@ -171,7 +189,10 @@ compactProjectSummary <- function(accession,
                            identified.ptm.strings,
                            instruments,
                            project.tags,
-                           submission.type) {
+                           submission.type,
+                           lab.PIs,
+                           submitters,
+                           affiliations) {
   new("compactProjectSummary",
       accession = accession,
       project.title = project.title,
@@ -182,7 +203,10 @@ compactProjectSummary <- function(accession,
       identified.ptm.strings = identified.ptm.strings,
       instruments = instruments,
       project.tags = project.tags,
-      submission.type = submission.type
+      submission.type = submission.type,
+      lab.PIs = lab.PIs,
+      submitters = submitters,
+      affiliations = affiliations
   )
 }
 
@@ -204,6 +228,9 @@ setMethod("show",
             cat("    Instruments: ", object@instruments, "\n", sep=" ")
             cat("    Tags: ", object@project.tags, "\n", sep=" ")
             cat("    Submission type: ", object@submission.type, "\n", sep="")
+            cat("    Lab PIs: ", object@lab.PIs, "\n", sep="")
+            cat("    Submitters: ", object@submitters, "\n", sep="")
+            cat("    Affiliations: ", object@affiliations, "\n", sep="")
             invisible(NULL)
           }
 )
@@ -428,6 +455,72 @@ setReplaceMethod("submission.type", "compactProjectSummary",
                  }
 )
 
+#' Returns a lab PIs
+#'
+#' @param object a compactProjectSummary
+#' @return the lab PIs
+#' @author Tremayne Booker
+#' @export
+setMethod("lab.PIs", "compactProjectSummary", function(object) object@lab.PIs)
+
+#' Replaces the lab PIs
+#'
+#' @param object a compactProjectSummary
+#' @param value lab PIs
+#' @author Tremayne Booker
+#' @export
+setReplaceMethod("lab.PIs", "compactProjectSummary",
+                 function(object, value) {
+                   object@lab.PIs <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+#' Returns a submitters
+#'
+#' @param object a compactProjectSummary
+#' @return the submitters
+#' @author Jose A. Dianes
+#' @export
+setMethod("submitters", "compactProjectSummary", function(object) object@submitters)
+
+#' Replaces the submitters
+#'
+#' @param object a compactProjectSummary
+#' @param value submitters
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("submitters", "compactProjectSummary",
+                 function(object, value) {
+                   object@submitters <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+#' Returns a affiliations
+#'
+#' @param object a compactProjectSummary
+#' @return the affiliations
+#' @author Jose A. Dianes
+#' @export
+setMethod("affiliations", "compactProjectSummary", function(object) object@affiliations)
+
+#' Replaces the affiliations
+#'
+#' @param object a compactProjectSummary
+#' @param value affiliations
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("affiliations", "compactProjectSummary",
+                 function(object, value) {
+                   object@affiliations <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
 #' Returns a compactProjectSummary instance from a JSON string representation, except
 #' this is specifically for the search function as the JSON is formatted differently
 #'
@@ -450,7 +543,10 @@ from.json.compactProjectSummary <- function(json.object) {
              identified.ptm.strings = ifelse(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0), MISSING_VALUE, json.object$identifiedPTMStrings),
              instruments = ifelse(is.null(json.object$instruments) || (length(json.object$instruments)==0), MISSING_VALUE, json.object$instruments),
              project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
-             submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType)
+             submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType),
+             lab.PIs = ifelse(is.null(json.object$labPIs) || (length(json.object$labPIs)==0), MISSING_VALUE, json.object$labPIs),
+             submitters = ifelse(is.null(json.object$submitters) || (length(json.object$submitters)==0), MISSING_VALUE, json.object$submitters),
+             affiliations = ifelse(is.null(json.object$affiliations) || (length(json.object$affiliations)==0), MISSING_VALUE, json.object$affiliations)
   )
 
   return (res)
@@ -471,7 +567,7 @@ from.json.compactProjectSummary <- function(json.object) {
 #' @details TODO
 #' @importFrom rjson fromJSON
 #' @export
-search.ProjectSummary <- function(keywords, page.size=10, page.number = 0, sort.direction = "DESC", all = FALSE, filter = "") {
+search.ProjectSummary <- function(keywords = "", page.size=10, page.number = 0, sort.direction = "DESC", all = FALSE, filters = "") {
   if(all){
     search.ProjectSummary.and(keywords, page.size, page.number, sort.direction)
   }
@@ -480,7 +576,7 @@ search.ProjectSummary <- function(keywords, page.size=10, page.number = 0, sort.
   for(word in keywords){
     q <- paste0(q, "keyword=", word, "&")
   }
-  for(word in filter){
+  for(word in filters){
     f <- paste0(f, word, ",")
   }
   json.list <- fromJSON(file=paste0(pride_archive_url, "/search/projects?", q, "filter=", f, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")

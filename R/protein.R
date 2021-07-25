@@ -83,8 +83,8 @@ get.list.ProteinDetail <- function(page.size = 10){
 #'@details i dunno
 #'@importFrom rjson fromJSON
 #'@export
-get.ProteinDetail.accession <- function(accession){
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/proteinevidences?projectAccession=", accession), method="C")
+get.ProteinDetail.accession <- function(accession, page.size = 10, page.number = 0, sort.direction = "DESC"){
+  json.list <- fromJSON(file=paste0(pride_archive_url, "/proteinevidences?projectAccession=", accession, "&pageSize=", page.size, "&page=", page.number, "&sortDirection=", sort.direction), method="C")
   protein.list <- lapply(json.list[[1]]$proteinevidences, function(x) { ProteinDetail(x)})
   return(protein.list)
 }

@@ -14,7 +14,10 @@ compactProjectSummary(
   identified.ptm.strings,
   instruments,
   project.tags,
-  submission.type
+  submission.type,
+  lab.PIs,
+  submitters,
+  affiliations
 )
 }
 \arguments{

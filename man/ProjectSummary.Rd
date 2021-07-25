@@ -18,7 +18,10 @@ ProjectSummary(
   instruments,
   quantification.methods,
   project.tags,
-  submission.type
+  submission.type,
+  lab.PIs,
+  submitters,
+  affiliations
 )
 }
 \arguments{

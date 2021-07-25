@@ -4,7 +4,12 @@
 \alias{get.PeptideDetail.accession}
 \title{Returns a list of peptides from a specific project from Pride}
 \usage{
-get.PeptideDetail.accession(accession)
+get.PeptideDetail.accession(
+  accession,
+  page.size = 10,
+  page.number = 0,
+  sort.direction = "DESC"
+)
 }
 \arguments{
 \item{accession}{is the project accession}

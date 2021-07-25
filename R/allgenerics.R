@@ -111,6 +111,30 @@ if (!isGeneric("submission.type<-")) {
   setGeneric("submission.type<-", function(object, value) standardGeneric("submission.type<-"))
 }
 
+if (!isGeneric("lab.PIs")) {
+  setGeneric("lab.PIs", function(object) standardGeneric("lab.PIs"))
+}
+
+if (!isGeneric("lab.PIs<-")) {
+  setGeneric("lab.PIs<-", function(object, value) standardGeneric("lab.PIs<-"))
+}
+
+if (!isGeneric("submitters")) {
+  setGeneric("submitters", function(object) standardGeneric("submitters"))
+}
+
+if (!isGeneric("submitters<-")) {
+  setGeneric("submitters<-", function(object, value) standardGeneric("submitters<-"))
+}
+
+if (!isGeneric("affiliations")) {
+  setGeneric("affiliations", function(object) standardGeneric("affiliations"))
+}
+
+if (!isGeneric("affiliations<-")) {
+  setGeneric("affiliations<-", function(object, value) standardGeneric("affiliations<-"))
+}
+
 
 if (!isGeneric("results")) {
   setGeneric("results", function(object) standardGeneric("results"))
@@ -169,12 +193,12 @@ if (!isGeneric("file.source<-")) {
   setGeneric("file.source<-", function(object, value) standardGeneric("file.source<-"))
 }
 
-if (!isGeneric("file.size")) {
-  setGeneric("file.size", function(object) standardGeneric("file.size"))
+if (!isGeneric("file.bytes")) {
+  setGeneric("file.bytes", function(object) standardGeneric("file.bytes"))
 }
 
-if (!isGeneric("file.size<-")) {
-  setGeneric("file.size<-", function(object, value) standardGeneric("file.size<-"))
+if (!isGeneric("file.bytes<-")) {
+  setGeneric("file.bytes<-", function(object, value) standardGeneric("file.bytes<-"))
 }
 
 if (!isGeneric("download.link")) {

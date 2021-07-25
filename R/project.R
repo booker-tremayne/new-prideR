@@ -2,7 +2,8 @@ pride_archive_url <- "http://www.ebi.ac.uk/pride/ws/archive/v2"
 pride_archive_url_dev <- "http://wwwdev.ebi.ac.uk/pride/ws/archive/v2"
 
 MISSING_VALUE <- "Not available"
-MISSING_VALUE_LIST <- list(list( "name" = "Not available", "accession" = "Not available"))
+MISSING_VALUE_LIST <- list(list( "name" = "Not available", "accession" = "Not available",
+                                 "title" = "Not available", "email" = "Not available", "affiliation" = "Not available"))
 
 #' ProjectSummaryList represents a PRIDE Archive project collection
 #'
@@ -98,7 +99,10 @@ setClass(
     instruments = "list", #replaced instrument.names with instruments
     quantification.methods = "list", #added
     project.tags = "character", #good
-    submission.type = "character" #good
+    submission.type = "character", #good
+    lab.PIs = "list", #added
+    submitters = "list", #added
+    affiliations = "character" #added
   ),
 
   prototype = list(
@@ -114,7 +118,10 @@ setClass(
     instruments = MISSING_VALUE_LIST,
     quantification.methods = MISSING_VALUE_LIST,
     project.tags = MISSING_VALUE,
-    submission.type = MISSING_VALUE
+    submission.type = MISSING_VALUE,
+    lab.PIs = MISSING_VALUE_LIST,
+    submitters = MISSING_VALUE_LIST,
+    affiliations = MISSING_VALUE
   ),
   validity = function(object) {
     # check accession
@@ -172,6 +179,18 @@ setClass(
     # check submission.type
     if (!is.character(object@submission.type) || nchar(object@submission.type) == 0 || is.na(object@submission.type))
       return("'submission.type' must be a single valid string")
+
+    # check lab.PIs
+    if (!is.list(object@lab.PIs) || is.na(object@lab.PIs))
+      return("'lab.PIs' must be a valid list")
+
+    # check submitters
+    if (!is.list(object@submitters) || is.na(object@submitters))
+      return("'submitters' must be a valid list")
+
+    # check affiliations
+    if (!is.character(object@affiliations) || is.na(object@affiliations))
+      return("'affiliations' must be a one or multiple valid strings")
   }
 )
 
@@ -200,7 +219,10 @@ ProjectSummary <- function(accession,
                            instruments,
                            quantification.methods,
                            project.tags,
-                           submission.type) {
+                           submission.type,
+                           lab.PIs,
+                           submitters,
+                           affiliations) {
   new("ProjectSummary",
       accession = accession,
       project.title = project.title,
@@ -215,7 +237,10 @@ ProjectSummary <- function(accession,
       instruments = instruments,
       quantification.methods = quantification.methods,
       project.tags = project.tags,
-      submission.type = submission.type
+      submission.type = submission.type,
+      lab.PIs = lab.PIs,
+      submitters = submitters,
+      affiliations = affiliations
   )
 }
 
@@ -233,6 +258,8 @@ setMethod("show",
             cat("    Description: ", object@project.description, "\n", sep="")
             cat("    Sample Processing Protocol: ", object@sample.processing.protocol, "\n", sep="")
             cat("    Data Processing Protocol: ", object@data.processing.protocol, "\n", sep="")
+            cat("    Tags: ", object@project.tags, "\n", sep=" ")
+            cat("    Submission type: ", object@submission.type, "\n", sep="")
             cat("    Organism(s): ", "\n", sep="")
             for(val in object@organisms){
               cat("        ", val$name, sep="")
@@ -263,8 +290,19 @@ setMethod("show",
               cat("        ", val$name, sep="")
               cat("  |  Accession: ", val$accession, "\n", sep="")
             }
-            cat("    Tags: ", object@project.tags, "\n", sep=" ")
-            cat("    Submission type: ", object@submission.type, "\n", sep="")
+            cat("    Lab PIs: ", "\n", sep=" ")
+            for(val in object@lab.PIs){
+              cat("        Name: ", val$title, " ", val$name, sep="")
+              cat("  |  Email: ", val$email, "\n", sep="")
+              cat("        Affiliation: ", val$affiliation, "\n", sep=" ")
+            }
+            cat("    Submitters: ", "\n", sep=" ")
+            for(val in object@submitters){
+              cat("        Name: ", val$title, " ", val$name, sep="")
+              cat("  |  Email: ", val$email, "\n", sep="")
+              cat("        Affiliation: ", val$affiliation, "\n", sep=" ")
+            }
+
             invisible(NULL)
           }
 )
@@ -579,6 +617,72 @@ setReplaceMethod("submission.type", "ProjectSummary",
                  }
 )
 
+#' Returns a lab PIs
+#'
+#' @param object a compactProjectSummary
+#' @return the lab PIs
+#' @author Tremayne Booker
+#' @export
+setMethod("lab.PIs", "compactProjectSummary", function(object) object@lab.PIs)
+
+#' Replaces the lab PIs
+#'
+#' @param object a compactProjectSummary
+#' @param value lab PIs
+#' @author Tremayne Booker
+#' @export
+setReplaceMethod("lab.PIs", "compactProjectSummary",
+                 function(object, value) {
+                   object@lab.PIs <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+#' Returns a submitters
+#'
+#' @param object a compactProjectSummary
+#' @return the submitters
+#' @author Jose A. Dianes
+#' @export
+setMethod("submitters", "compactProjectSummary", function(object) object@submitters)
+
+#' Replaces the submitters
+#'
+#' @param object a compactProjectSummary
+#' @param value submitters
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("submitters", "compactProjectSummary",
+                 function(object, value) {
+                   object@submitters <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
+#' Returns a affiliations
+#'
+#' @param object a compactProjectSummary
+#' @return the affiliations
+#' @author Jose A. Dianes
+#' @export
+setMethod("affiliations", "compactProjectSummary", function(object) object@affiliations)
+
+#' Replaces the affiliations
+#'
+#' @param object a compactProjectSummary
+#' @param value affiliations
+#' @author Jose A. Dianes
+#' @export
+setReplaceMethod("affiliations", "compactProjectSummary",
+                 function(object, value) {
+                   object@affiliations <- value
+                   if (validObject(object))
+                     return(object)
+                 }
+)
+
 
 format.ProjectSummary <- function(x, ...) paste0(x@accession, ", ", x@title)
 
@@ -607,7 +711,10 @@ from.json.ProjectSummary <- function(json.object) {
              instruments = if(is.null(json.object$instruments) || (length(json.object$instruments)==0)) MISSING_VALUE_LIST else json.object$instruments,
              quantification.methods = if(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0)) MISSING_VALUE_LIST else json.object$quantificationMethods,
              project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
-             submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType)
+             submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType),
+             lab.PIs = if(is.null(json.object$labPIs) || (length(json.object$labPIs)==0)) MISSING_VALUE_LIST else json.object$labPIs,
+             submitters = if(is.null(json.object$submitters) || (length(json.object$submitters)==0)) MISSING_VALUE_LIST else json.object$submitters,
+             affiliations = ifelse(is.null(json.object$affiliations) || (length(json.object$submitters) == 0), MISSING_VALUE, json.object$affiliations)
   )
 
   return (res)

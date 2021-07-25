@@ -7,12 +7,12 @@ to satisfy a given query. This is actually a
 query filtered version of project_list}
 \usage{
 search.ProjectSummary(
-  keywords,
+  keywords = "",
   page.size = 10,
   page.number = 0,
   sort.direction = "DESC",
   all = FALSE,
-  filter = ""
+  filters = ""
 )
 }
 \arguments{

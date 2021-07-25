@@ -12,12 +12,11 @@ format.FileDetail <- function(x, ...) paste0(x@file.name, ", ", x@project.access
 #' @exportClass FileDetail
 setClass(
   "FileDetail",
-
   slots = c(
     project.accession = "character",
     file.name = "character",
     file.type = "character",
-    file.size = "numeric",
+    file.bytes = "numeric",
     download.link = "character"
   ),
 
@@ -25,7 +24,7 @@ setClass(
     project.accession = MISSING_VALUE,
     file.name = MISSING_VALUE,
     file.type = MISSING_VALUE,
-    file.size = 0,
+    file.bytes = 0,
     download.link = MISSING_VALUE
   ),
 
@@ -39,9 +38,9 @@ setClass(
     if (!is.character(object@file.name) || nchar(object@file.name) == 0 || is.na(object@file.name))
       return("'file.name' must be a single valid string")
 
-    # check file.size
-    if (!is.numeric(object@file.size) || object@file.size < 0 ||is.na(object@file.size))
-      return("'file.size' must be a none negative number")
+    # check file.bytes
+    if (!is.numeric(object@file.bytes) || object@file.bytes < 0 ||is.na(object@file.bytes))
+      return("'file.bytes' must be a none negative number")
 
     # check download.link
     if (!is.character(object@download.link) || nchar(object@download.link) == 0 || is.na(object@download.link))
@@ -56,14 +55,14 @@ setClass(
 #' @param project.accession project accession
 #' @param file.name the name of the file
 #' @param file.type the type of the file. e.g. RAW, PEAK, RESULT and etc
-#' @param file.size the size of the file
+#' @param file.bytes the size of the file
 #' @param download.link URL for downloading the file
-FileDetail <- function(project.accession, file.name, file.type, file.size, download.link) {
+FileDetail <- function(project.accession, file.name, file.type, file.bytes, download.link) {
   new("FileDetail",
       project.accession = project.accession,
       file.name = file.name,
       file.type = file.type,
-      file.size = file.size,
+      file.bytes = file.bytes,
       download.link = download.link)
 }
 
@@ -79,7 +78,7 @@ setMethod("show",
             cat("    Project accession: ", object@project.accession, "\n", sep="")
             cat("    File name: ", object@file.name, "\n", sep="")
             cat("    File type: ", object@file.type, "\n", sep="")
-            cat("    File size: ", object@file.size, "\n", sep="")
+            cat("    File size: ", object@file.bytes, "\n", sep="")
             cat("    Download link: ", object@download.link, "\n", sep="")
             invisible(NULL)
           }
@@ -157,20 +156,20 @@ setReplaceMethod("file.type", "FileDetail",
 #' Returns a file size
 #'
 #' @param object a FileDetail
-#' @return the file.size
+#' @return the file.bytes
 #' @author Jose A. Dianes
 #' @export
-setMethod("file.size", "FileDetail", function(object) object@file.size)
+setMethod("file.bytes", "FileDetail", function(object) object@file.bytes)
 
 #' Replaces a file size
 #'
 #' @param object a FileDetail
-#' @param value the file.size
+#' @param value the file.bytes
 #' @author Jose A. Dianes
 #' @export
-setReplaceMethod("file.size", "FileDetail",
+setReplaceMethod("file.bytes", "FileDetail",
                  function(object, value) {
-                   object@file.size <- value
+                   object@file.bytes <- value
                    if (validObject(object)) {
                      return(object)
                    }
@@ -226,7 +225,7 @@ from.json.FileDetail <- function(json.object) {
              project.accession = json.object$projectAccessions,
              file.name = json.object$fileName,
              file.type = json.object$fileCategory$value,
-             file.size = json.object$fileSizeBytes,
+             file.bytes = json.object$fileSizeBytes,
              download.link = download.link.1
   )
 
@@ -274,9 +273,9 @@ search.file.by.name <- function(file.name){
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
-search.project.list <- function(project.list, keywords, and = FALSE, file.size.low = 0, file.size.high = 999999999){
-  if(and){
-    return(search.project.list.and(project.list, keywords))
+search.FileDetail <- function(project.list, keywords, all = FALSE, file.size.min = 0, file.size.max = 99999999999){
+  if(all){
+    return(search.FileDetail.and(project.list, keywords, file.size.min, file.size.max))
   }
   new.project.list <- list()
   for (project in project.list){
@@ -286,7 +285,7 @@ search.project.list <- function(project.list, keywords, and = FALSE, file.size.l
     for (file in file.list){
       for (word in keywords){
         if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-          if(file@file.size >= file.size.low & file@file.size <= file.size.high){
+          if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max){
             new.project.list <- c(new.project.list, project)
             success <- TRUE
             break
@@ -310,7 +309,7 @@ search.project.list <- function(project.list, keywords, and = FALSE, file.size.l
 #' @return the project list of successful matches
 #' @author Tremayne Booker
 #' @details i dunno
-search.project.list.and <- function(project.list, keywords){
+search.FileDetail.and <- function(project.list, keywords, file.size.min, file.size.max){
   new.project.list <- list()
   failure <- TRUE
   for (project in project.list){
@@ -346,12 +345,28 @@ search.project.list.and <- function(project.list, keywords){
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export
-download.files.from.project <- function(project.accession, file.dir){
+download.files.from.accession <- function(project.accession, file.dir){
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
   file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   for(val in file.list){
     print(val)
     download.fileDetail(val, file.dir)
+  }
+}
+
+#' Downloads all projects from given project list
+#'
+#' @param project.accession is the project to be searched for
+#' @param file.dir is the directory the file is to be downloaded at
+#' @author Tremayne Booker
+#' @details i dunno
+#' @export
+download.files.from.project.list <- function(project.list, file.dir){
+  json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
+  file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
+  for(project in project.list){
+    directory <- paste0(file.dir, "/", project@project.title)
+    download.files.from.accession(project@accession, directory)
   }
 }
 
