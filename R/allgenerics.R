@@ -135,31 +135,6 @@ if (!isGeneric("affiliations<-")) {
   setGeneric("affiliations<-", function(object, value) standardGeneric("affiliations<-"))
 }
 
-
-if (!isGeneric("results")) {
-  setGeneric("results", function(object) standardGeneric("results"))
-}
-
-if (!isGeneric("total.results")) {
-  setGeneric("total.results", function(object) standardGeneric("total.results"))
-}
-
-if (!isGeneric("page.number")) {
-  setGeneric("page.number", function(object) standardGeneric("page.number"))
-}
-
-if (!isGeneric("page.size")) {
-  setGeneric("page.size", function(object) standardGeneric("page.size"))
-}
-
-if (!isGeneric("query")) {
-  setGeneric("query", function(object) standardGeneric("query"))
-}
-
-if (!isGeneric("project.list")) {
-  setGeneric("project.list", function(object) standardGeneric("project.list"))
-}
-
 #File Generics
 if (!isGeneric("project.accession")) {
   setGeneric("project.accession", function(object) standardGeneric("project.accession"))

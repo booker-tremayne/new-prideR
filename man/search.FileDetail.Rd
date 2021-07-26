@@ -7,6 +7,7 @@
 search.FileDetail(
   project.list,
   keywords,
+  filetype = " ",
   all = FALSE,
   file.size.min = 0,
   file.size.max = 99999999999
@@ -17,11 +18,11 @@ search.FileDetail(
 
 \item{keywords}{the word or words the user is searching for in files}
 
-\item{and}{TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR}
+\item{all}{TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR}
 
-\item{file.size.low}{is the lower range of file memory size the user can specify}
+\item{file.size.min}{is the lower range of file memory size the user can specify}
 
-\item{file.size.high}{is the upper range of file memory size the user can specify}
+\item{file.size.max}{is the upper range of file memory size the user can specify}
 }
 \value{
 the project list of successful matches

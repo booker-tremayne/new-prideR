@@ -240,7 +240,7 @@ from.json.FileDetail <- function(json.object) {
 #' @details TODO
 #' @importFrom rjson fromJSON
 #' @export
-project.FileDetail <- function(project.accession) {
+get.FileDetail <- function(project.accession) {
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
   file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   return(file.list)
@@ -254,7 +254,7 @@ project.FileDetail <- function(project.accession) {
 #' @details I dunno
 #' @importFrom rjson fromJSON
 #' @export
-search.file.by.name <- function(file.name){
+get.FileDetail.by.name <- function(file.name){
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/fileByName?fileName=", file.name))
   file.list <- from.json.FileDetail(json.list)
   return(file.list)
@@ -264,18 +264,18 @@ search.file.by.name <- function(file.name){
 #'
 #' @param project.list the list of projects the user wishes to search the files through
 #' @param keywords the word or words the user is searching for in files
-#' @param and TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR
-#' @param file.size.low is the lower range of file memory size the user can specify
-#' @param file.size.high is the upper range of file memory size the user can specify
+#' @param all TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR
+#' @param file.size.min is the lower range of file memory size the user can specify
+#' @param file.size.max is the upper range of file memory size the user can specify
 #' @importFrom stringr regex
 #' @importFrom stringr str_detect
 #' @return the project list of successful matches
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
-search.FileDetail <- function(project.list, keywords, all = FALSE, file.size.min = 0, file.size.max = 99999999999){
+search.FileDetail <- function(project.list, keywords, filetype = " ", all = FALSE, file.size.min = 0, file.size.max = 99999999999){
   if(all){
-    return(search.FileDetail.and(project.list, keywords, file.size.min, file.size.max))
+    return(search.FileDetail.and(project.list, keywords, filetype, file.size.min, file.size.max))
   }
   new.project.list <- list()
   for (project in project.list){
@@ -285,7 +285,7 @@ search.FileDetail <- function(project.list, keywords, all = FALSE, file.size.min
     for (file in file.list){
       for (word in keywords){
         if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-          if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max){
+          if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max & (filetype == " " | file@file.type == filetype)){
             new.project.list <- c(new.project.list, project)
             success <- TRUE
             break
@@ -320,9 +320,11 @@ search.FileDetail.and <- function(project.list, keywords, file.size.min, file.si
       for (word in keywords){
         for (file in file.list){
           if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-            matches <- matches + 1
-            failure <- FALSE
-            break
+            if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max & (filetype == " " | file@file.type == filetype)){
+              matches <- matches + 1
+              failure <- FALSE
+              break
+            }
           }
         }
         if(failure){
@@ -392,17 +394,4 @@ download.fileDetail <- function(file, file.dir){
 download.file.by.name <- function(file.name, file.dir){
   file <- search.file.by.name(file.name)
   download.fileDetail(file, file.dir)
-}
-
-#' Uploads given folder to specified directory on Pride
-#'
-#' @param folder.path the pathway to the folder to be uploaded
-#' @param target.dir the directory on Pride where the folder is destined
-#' @author Tremayne Booker
-#' @details i dunno
-#' @export
-folder.upload.Pride <- function(folder.path, target.dir){
-  upload_function <- paste0("ascp.exe -P33001 -QT -l300M L --file-manifest=text -k2 -o Overwrite=diff ", folder.path, " ")
-  upload_function <- paste0(upload_function, "pride-drop-006@hx-fasp-1.ebi.ac.uk:/", target.dir)
-  system(upload_function)
 }
