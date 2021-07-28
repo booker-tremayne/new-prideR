@@ -5,33 +5,24 @@ MISSING_VALUE <- "Not available"
 
 #' compactProjectSummary represents a PRIDE Archive project dataset
 #'
-#' @importFrom rjson fromJSON
 #' @export
 #' @exportClass compactProjectSummary
 setClass(
   "compactProjectSummary",
-  #removed  num.assays,
-  #
-  #replaced instrument.names with instruments
-  #        species with organisms
-  #        tissues with organism.parts
-  #        ptm.names with identified.ptm.strings
-  #
-  #add
   slots = list(
-    accession = "character", #good
-    project.title = "character", #good
-    project.description = "character", #good
-    publication.date = "POSIXct", #good
-    organisms = "character", #replaced species with organisms
-    organism.parts = "character", #replaced tissues with organism.parts
-    identified.ptm.strings = "character", #replaced ptm.names with identified.ptm.strings
-    instruments = "character", #replaced instrument.names with instruments
-    project.tags = "character", #good
-    submission.type = "character", #good
-    lab.PIs = "character", #added
-    submitters = "character", #added
-    affiliations = "character" #added
+    accession = "character",
+    project.title = "character",
+    project.description = "character",
+    publication.date = "POSIXct",
+    organisms = "character",
+    organism.parts = "character",
+    identified.ptm.strings = "character",
+    instruments = "character",
+    project.tags = "character",
+    submission.type = "character",
+    lab.PIs = "character",
+    submitters = "character",
+    affiliations = "character"
   ),
 
   prototype = list(

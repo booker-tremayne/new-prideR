@@ -1,16 +1,17 @@
 Package: newprideR
-Title: What the Package Does (One Line, Title Case)
+Title: Explore the Pride Archive in R
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Tremayne",
+           family = "Booker",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "booker.tremayne@gmail.com")
+Description: Includes classes and functions to retrieve project, file, peptide,
+    and protein meta data from the Pride Archive. Utilizes the Pride API which
+    can be found here: https://www.ebi.ac.uk/pride/ws/archive/v2/swagger-ui.html.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
-Imports: methods, rjson, stringr
+Imports: rjson
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

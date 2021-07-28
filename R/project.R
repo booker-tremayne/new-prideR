@@ -7,37 +7,28 @@ MISSING_VALUE_LIST <- list(list( "name" = "Not available", "accession" = "Not av
 
 #' ProjectSummary represents a PRIDE Archive project dataset
 #'
-#' @importFrom rjson fromJSON
 #' @export
 #' @exportClass ProjectSummary
 setClass(
   "ProjectSummary",
-  #removed  num.assays,
-  #
-  #replaced instrument.names with instruments
-  #        species with organisms
-  #        tissues with organism.parts
-  #        ptm.names with identified.ptm.strings
-  #
-  #add
     slots = list(
-    accession = "character", #good
-    project.title = "character", #good
-    project.description = "character", #good
-    sample.processing.protocol = "character", #added
-    data.processing.protocol = "character", #added
-    publication.date = "POSIXct", #good
-    organisms = "list", #replaced species with organisms
-    organism.parts = "list", #replaced tissues with organism.parts
-    diseases = "list", #added
-    identified.ptm.strings = "list", #replaced ptm.names with identified.ptm.strings
-    instruments = "list", #replaced instrument.names with instruments
-    quantification.methods = "list", #added
-    project.tags = "character", #good
-    submission.type = "character", #good
-    lab.PIs = "list", #added
-    submitters = "list", #added
-    affiliations = "character" #added
+    accession = "character",
+    project.title = "character",
+    project.description = "character",
+    sample.processing.protocol = "character",
+    data.processing.protocol = "character",
+    publication.date = "POSIXct",
+    organisms = "list",
+    organism.parts = "list",
+    diseases = "list",
+    identified.ptm.strings = "list",
+    instruments = "list",
+    quantification.methods = "list",
+    project.tags = "character",
+    submission.type = "character",
+    lab.PIs = "list",
+    submitters = "list",
+    affiliations = "character"
   ),
 
   prototype = list(

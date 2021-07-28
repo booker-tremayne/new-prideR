@@ -6,11 +6,12 @@
 \usage{
 search.FileDetail(
   project.list,
-  keywords,
+  keywords = "",
   filetype = " ",
   all = FALSE,
   file.size.min = 0,
-  file.size.max = 99999999999
+  file.size.max = 99999999999,
+  use.regex = FALSE
 )
 }
 \arguments{
@@ -25,7 +26,7 @@ search.FileDetail(
 \item{file.size.max}{is the upper range of file memory size the user can specify}
 }
 \value{
-the project list of successful matches
+the FileDetailList list of successful matches
 }
 \description{
 Searches a list of projects for keyword matches

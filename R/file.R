@@ -5,9 +5,28 @@ MISSING_VALUE <- "Not Available"
 
 format.FileDetail <- function(x, ...) paste0(x@file.name, ", ", x@project.accession)
 
+#' FileDetailList represents a list of FileDetails organized by their associated project
+#'
+#' @param ProjectSummary is the file(s) associated project
+#' @param FileDetailList is the list of file details that are within the project
+#' @param file.count is the amount of files associated with the project
+#' @author Tremayne Booker
+#' @export
+FileDetailList <- function(ProjectSummary){
+  files <- get.FileDetail(ProjectSummary@accession)
+  file.count <- length(files)
+  FileDetailList <- list(
+    project = ProjectSummary,
+    file.count = file.count,
+    file.list = files
+  )
+  test <- structure(FileDetailList, class = "FileDetailList")
+  return(test)
+}
+
+
 #' FileDetail represents a PRIDE Archive file
 #'
-#' @import methods
 #' @export
 #' @exportClass FileDetail
 setClass(
@@ -246,6 +265,18 @@ get.FileDetail <- function(project.accession) {
   return(file.list)
 }
 
+#' Returns a FileDetailList for each of the projects given to it in project.list
+#'
+#' @param project.accession the project accession
+#' @return The FileDetailList
+#' @author Tremayne Booker
+#' @details TODO
+#' @export
+get.FileDetail.ProjectSummary.List <- function(project.list){
+  file.list <- lapply(project.list, function(x) { FileDetailList(x)})
+  return(file.list)
+}
+
 #' Finds all the files with the user given file name
 #'
 #' @param file.name the name of the file user wishes to find
@@ -267,77 +298,58 @@ get.FileDetail.by.name <- function(file.name){
 #' @param all TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR
 #' @param file.size.min is the lower range of file memory size the user can specify
 #' @param file.size.max is the upper range of file memory size the user can specify
-#' @importFrom stringr regex
-#' @importFrom stringr str_detect
-#' @return the project list of successful matches
+#' @return the FileDetailList list of successful matches
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
-search.FileDetail <- function(project.list, keywords, filetype = " ", all = FALSE, file.size.min = 0, file.size.max = 99999999999){
-  if(all){
-    return(search.FileDetail.and(project.list, keywords, filetype, file.size.min, file.size.max))
+search.FileDetail <- function(project.list, keywords = "", filetype = " ", all = FALSE, file.size.min = 0, file.size.max = 99999999999, use.regex = FALSE){
+  new.project.list <- vector("list", length(project.list))
+  matches <- 0
+  if (class(project.list[[1]]) != "FileDetailList") {
+    project.list <- lapply(project.list, function(x) { FileDetailList(x)})
   }
-  new.project.list <- list()
-  for (project in project.list){
-    success <- FALSE
-    accession <- project@accession
-    file.list <- project.FileDetail(accession)
-    for (file in file.list){
-      for (word in keywords){
-        if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-          if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max & (filetype == " " | file@file.type == filetype)){
-            new.project.list <- c(new.project.list, project)
-            success <- TRUE
-            break
-          }
-        }
-      }
-      if(success){
-        break
-      }
-    }
-  }
+  new.project.list <- lapply(project.list, search.FileDetail.loop, all = all, keywords = keywords, filetype = filetype, file.size.min = file.size.min, file.size.max = file.size.max, use.regex = use.regex)
+  new.project.list<-new.project.list[!sapply(new.project.list, is.null)]
   return(new.project.list)
 }
+
 
 #' Extension of search.project.list if the user would like AND matches
 #'
 #' @param project.list the list of projects the user wishes to search the files through
 #' @param keywords the word or words the user is searching for in files
-#' @importFrom stringr regex
-#' @importFrom stringr str_detect
 #' @return the project list of successful matches
 #' @author Tremayne Booker
 #' @details i dunno
-search.FileDetail.and <- function(project.list, keywords, file.size.min, file.size.max){
-  new.project.list <- list()
-  failure <- TRUE
-  for (project in project.list){
-    matches <- 0
-    accession <- project@accession
-    file.list <- project.FileDetail(accession)
+search.FileDetail.loop <- function(project, keywords, all, filetype, file.size.min, file.size.max, use.regex){
+  matches <- 0
+  for (word in keywords){
+    success <- FALSE
 
-      for (word in keywords){
-        for (file in file.list){
-          if(str_detect(file@file.name, regex(word, ignore_case = TRUE))){
-            if(file@file.bytes >= file.size.min & file@file.bytes <= file.size.max & (filetype == " " | file@file.type == filetype)){
-              matches <- matches + 1
-              failure <- FALSE
-              break
-            }
-          }
-        }
-        if(failure){
-          break
-        }
-        failure <- TRUE
+    for (file in project$file.list){
+
+      if(!all &                                                                     # Checks whether or not it should use ALL logic or ANY logic
+         grepl(word, file@file.name, fixed = use.regex) &                           # Checks if a keyword matches the file name
+         (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &    # Checks if the file is within the file size requirement
+         (filetype == " " | file@file.type == filetype)){                           # Checks if the file matches the file type requirement
+        return(project)
       }
-    if(matches == length(keywords)){
-      new.project.list <- c(new.project.list, project)
+      else if(all &
+              grepl(file@file.name, word, fixed = use.regex) &
+              (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &
+              (filetype == " " | file@file.type == filetype)){
+        matches <- matches + 1
+        success <- TRUE
+        break
+      }
+
     }
+    if(all & !success) return(NULL)
+    else if(all & matches == length(keywords)) return(project)
   }
-  return(new.project.list)
+  return(NULL)
 }
+
 
 
 #' Searches for project and downloads all files from it
