@@ -2,7 +2,7 @@
 % Please edit documentation in R/file.R
 \name{show,FileDetail-method}
 \alias{show,FileDetail-method}
-\title{print out the details of the FileDetail on screen}
+\title{Print out the details of the FileDetail on screen}
 \usage{
 \S4method{show}{FileDetail}(object)
 }
@@ -10,7 +10,7 @@
 \item{object}{a FileDetail object}
 }
 \description{
-print out the details of the FileDetail on screen
+Print out the details of the FileDetail on screen
 }
 \author{
 Jose A. Dianes

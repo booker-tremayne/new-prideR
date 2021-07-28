@@ -125,6 +125,8 @@ setClass(
 #' @param accession project accession
 #' @param project.title the title of the project
 #' @param project.description the description of the project
+#' @param sample.processing.protocol the protocol that was used to gather the data
+#' @param data.processing.protocol the protocol that was used to process the data
 #' @param publication.date the date when the project was made public by PRIDE
 #' @param organisms the organisms of the project
 #' @param organism.parts the organism.parts of the project
@@ -132,6 +134,9 @@ setClass(
 #' @param instruments the names of the instruments used in the project
 #' @param project.tags the tags for the project
 #' @param submission.type the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE
+#' @param lab.PIs the principal investigators of the project
+#' @param submitters the person/people who submitted the project
+#' @param affiliations the groups the "lab.PIs" and "submitters" are affiliated with
 ProjectSummary <- function(accession,
                            project.title,
                            project.description,
@@ -172,7 +177,7 @@ ProjectSummary <- function(accession,
 
 #' Show the print-out version of the content in a ProjectSummary
 #'
-#' @param object a given ProjectSummary
+#' @param object a given ProjectSummary to be printed
 #' @export
 setMethod("show",
           signature = "ProjectSummary",
@@ -567,17 +572,17 @@ setReplaceMethod("lab.PIs", "compactProjectSummary",
 
 #' Returns a submitters
 #'
-#' @param object a compactProjectSummary
+#' @param object a ProjectSummary
 #' @return the submitters
-#' @author Jose A. Dianes
+#' @author Tremayne Booker
 #' @export
 setMethod("submitters", "compactProjectSummary", function(object) object@submitters)
 
 #' Replaces the submitters
 #'
-#' @param object a compactProjectSummary
+#' @param object a ProjectSummary
 #' @param value submitters
-#' @author Jose A. Dianes
+#' @author Tremayne Booker
 #' @export
 setReplaceMethod("submitters", "compactProjectSummary",
                  function(object, value) {
@@ -589,17 +594,17 @@ setReplaceMethod("submitters", "compactProjectSummary",
 
 #' Returns a affiliations
 #'
-#' @param object a compactProjectSummary
+#' @param object a ProjectSummary
 #' @return the affiliations
-#' @author Jose A. Dianes
+#' @author Tremayne Booker
 #' @export
 setMethod("affiliations", "compactProjectSummary", function(object) object@affiliations)
 
 #' Replaces the affiliations
 #'
-#' @param object a compactProjectSummary
+#' @param object a ProjectSummary
 #' @param value affiliations
-#' @author Jose A. Dianes
+#' @author Tremayne Booker
 #' @export
 setReplaceMethod("affiliations", "compactProjectSummary",
                  function(object, value) {
@@ -614,10 +619,7 @@ format.ProjectSummary <- function(x, ...) paste0(x@accession, ", ", x@title)
 
 #' Returns a ProjectSummary instance from a JSON string representation
 #'
-#' @param json_str The JSON object
-#' @param file the name of a file to read the json_str from; this can also be a URL. Only one of json_str or file must be supplied.
-#' @param method use the C implementation, or the older slower (and one day to be depricated) R implementation
-#' @param unexpected.escape changed handling of unexpected escaped characters. Handling value should be one of "error", "skip", or "keep"; on unexpected characters issue an error, skip the character, or keep the character
+#' @param json.object The JSON object from Pride API
 #' @return The ProjectSummary instance
 #' @author Jose A. Dianes
 #' @details TODO

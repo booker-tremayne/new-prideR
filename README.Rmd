@@ -1,0 +1,146 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+```{r setup}
+library(newprideR)
+```
+
+# Introduction
+NewprideR allows for exploring the Pride archive through R. NewprideR has classes and functions for Pride projects, files, peptides, and proteins. It allows for most search functionality featured on the Pride Archive website, and a bit more. This makes systematically searching, and downloading possible solely in R.
+
+All metadata received is obtained through the Pride Swagger UI API, which can be found here:  https://www.ebi.ac.uk/pride/ws/archive/v2/swagger-ui.html
+
+
+# Basic Use
+
+
+## Project Summaries
+
+Project Summaries is how meta data for projects are stored. 
+
+`search.ProjectSummary()` is the function to search for projects across Pride. 
+It can accept:
+
+  * __keywords__:  will return projects that feature the given word within the entire metadata
+  * __filters__: which will only return projects that have a value in a given field
+  * __Various Sorting methods__: which can specify how many elements per page, which page, and whether all keywords need to be matched to return a project or any keyword.
+
+For example:
+
+```{r}
+project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 4, all = FALSE, filter = "instruments==LTQ Orbitrap")
+project.list
+```
+
+`get.ProjectSummary()` retrieves more detailed information regarding a single project. It accepts project accessions.
+
+```{r}
+first.project <- get.ProjectSummary("PXD000001")
+first.project
+```
+
+`list.ProjectSummary()` retrieves projects from newest to oldest, only accepting page size and page number. 
+`get.similar.projects()` accepts a project accession and returns projects Pride deems similar.
+
+## File Details and File Detail Lists
+
+File Details store metadata corresponding to files which projects contain.
+
+File Detail Lists File Details and their associated project projects. It is intended for lists that contain multiple Project Summaries and their respective File Details
+
+`get.FileDetail()` is used to get FileDetail data from a project. It accepts project accessions.
+
+`get.FileDetailList()` gets all the FileDetails from a list of Project Summaries given to it.
+
+`search.FileDetail()` is the searching function for File Details. 
+It can accept:
+
+
+  * __ProjectSummary list/FileDetailList__ Can be either object
+  * __keywords__ : will return projects which contain files with the given keywords in their file name. Can be used to check file extensions.
+  * __a file type__ : will return projects which contain files with the given file type. File types are categories given by Pride. They are as follows ; "RAW", "SEARCH", "RESULT", "PEAK", "FASTA", "SPECTRUM_LIBRARY", "GEL", "PARAMETERS_FILE", "OTHER"
+  * __a file size range__ : will return projects which contain a file of the given size in bytes.
+  * __all/any logic__ : specifies whether a project must contain files with file names of every keyword or a single keyword
+  * __use.regex__ : specifies whether they keyword given is to be interpreted as a regular expression or exactly.
+
+Note that this returns a list of FileDetailList objects. Also note that this is case sensitive.
+
+
+For example:
+```{r}
+project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 19, all = FALSE, filter = "instruments==LTQ Orbitrap")
+file.list <- search.FileDetail(project.list, keywords = c(".tif", ".ibd", ".imzml"), all = TRUE)
+file.list
+```
+
+`download.files.from.project()` downloads all files from a project.
+`download.fileDetail()` downloads a single file corresponding to a File Detail.
+
+Note that `get.FileDetailList()` will be slow, and `search.FileDetail()` will be slow if given a Project Summary list and not a FileDetailList.
+
+## Peptide Details
+
+Peptide Details stores metadata for peptides within Pride.
+
+`get.PeptideDetail.accession()` accepts an accession, and returns a list of peptides assocaited with the given project.
+
+```{r}
+peptide.list <- get.PeptideDetail.accession("PXD019134", page.size = 2)
+peptide.list
+```
+
+`get.list.PeptideDetail()` returns a list of all peptides from Pride, accepting page size and page number.
+
+## Protein Details
+
+Protein Details stores metadata for proteins within Pride, and is similar to peptide details
+
+`get.ProteinDetail.accession()` accepts an accession, and returns a list of peptides assocaited with the given project.
+
+```{r}
+protein.list <- get.ProteinDetail.accession("PXD019134", page.size = 2)
+protein.list
+```
+
+`get.list.ProteinDetail()` returns a list of all peptides from Pride, accepting page size and page number.
+
+
+# Example
+
+We wish to obtain the projects that can be analyzed with *Cardinal*. For this, we need projects that contain ".ibd" and ."imzml" files. First, we should obtain all projects that contain the word "imaging" or "msi". This is necessary since the file searching method is slow when searching across several projects.
+
+```{r}
+imaging.list <- search.ProjectSummary(c("imaging", "msi"), page.size = 100, filters = "Alzheimer&apos;s disease")
+```
+
+Now, we must retrieve only projects containing the file extensions ".imzml" *and* ".ibd".
+
+```{r}
+successful.list <- search.FileDetail(imaging.list, c(".imzml", ".ibd"), all = TRUE)
+successful.list
+```
+
+Finally, we want an optical image in our projects to analyze as well. To do so, we may search for projects containing files with the extension ".jpg" *or* ".jpeg" *or* ".tif" *or* ".png". We can feed our previous successful list into the `search.project.list()` function to do so.
+
+```{r}
+final.list <- search.FileDetail(successful.list, c(".jpg", ".jpeg", ".tif", ".png"))
+final.list
+```
+
+Now we may choose to download these projects.
+
+```
+download.files.from.project.list(final.list, "/users/UserName/exampleDownload")
+```

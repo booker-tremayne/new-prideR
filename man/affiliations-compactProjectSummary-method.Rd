@@ -9,7 +9,7 @@
 \S4method{affiliations}{compactProjectSummary}(object)
 }
 \arguments{
-\item{object}{a compactProjectSummary}
+\item{object}{a ProjectSummary}
 }
 \value{
 the affiliations
@@ -24,5 +24,5 @@ Returns a affiliations
 \author{
 Jose A. Dianes
 
-Jose A. Dianes
+Tremayne Booker
 }

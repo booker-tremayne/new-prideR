@@ -24,6 +24,18 @@ FileDetailList <- function(ProjectSummary){
   return(test)
 }
 
+#' Print out FileDetailList object
+#'
+#' @param object a FileDetailList object
+#' @author Tremayne Booker
+#' @export
+print.FileDetailList <- function(object) {
+            cat("An object of class ", class(object), sep="")
+            cat(" Containing ", object$file.count, " files", "\n", sep="")
+            cat("   Associated Project: ", "\n", sep="")
+            print(object$project)
+            cat("\n")
+          }
 
 #' FileDetail represents a PRIDE Archive file
 #'
@@ -85,7 +97,7 @@ FileDetail <- function(project.accession, file.name, file.type, file.bytes, down
       download.link = download.link)
 }
 
-#' print out the details of the FileDetail on screen
+#' Print out the details of the FileDetail on screen
 #'
 #' @param object a FileDetail object
 #' @author Jose A. Dianes
@@ -272,7 +284,7 @@ get.FileDetail <- function(project.accession) {
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
-get.FileDetail.ProjectSummary.List <- function(project.list){
+get.FileDetailList <- function(project.list){
   file.list <- lapply(project.list, function(x) { FileDetailList(x)})
   return(file.list)
 }
@@ -302,7 +314,7 @@ get.FileDetail.by.name <- function(file.name){
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
-search.FileDetail <- function(project.list, keywords = "", filetype = " ", all = FALSE, file.size.min = 0, file.size.max = 99999999999, use.regex = FALSE){
+search.FileDetail <- function(project.list, keywords = "", filetype = " ", file.size.min = 0, file.size.max = 99999999999, all = FALSE, use.regex = FALSE){
   new.project.list <- vector("list", length(project.list))
   matches <- 0
   if (class(project.list[[1]]) != "FileDetailList") {
@@ -324,18 +336,20 @@ search.FileDetail <- function(project.list, keywords = "", filetype = " ", all =
 search.FileDetail.loop <- function(project, keywords, all, filetype, file.size.min, file.size.max, use.regex){
   matches <- 0
   for (word in keywords){
+    word <- tolower(word)
     success <- FALSE
 
     for (file in project$file.list){
+      file.name <- tolower(file@file.name)
 
       if(!all &                                                                     # Checks whether or not it should use ALL logic or ANY logic
-         grepl(word, file@file.name, fixed = use.regex) &                           # Checks if a keyword matches the file name
+         grepl(word, file.name, fixed = use.regex) &                           # Checks if a keyword matches the file name
          (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &    # Checks if the file is within the file size requirement
          (filetype == " " | file@file.type == filetype)){                           # Checks if the file matches the file type requirement
         return(project)
       }
       else if(all &
-              grepl(file@file.name, word, fixed = use.regex) &
+              grepl(word, file.name, fixed = use.regex) &
               (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &
               (filetype == " " | file@file.type == filetype)){
         matches <- matches + 1

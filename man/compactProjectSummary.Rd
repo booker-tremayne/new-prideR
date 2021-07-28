@@ -21,7 +21,7 @@ compactProjectSummary(
 )
 }
 \arguments{
-\item{accession}{project accession}
+\item{accession}{project accession - equivalent to project ID}
 
 \item{project.title}{the title of the project}
 
@@ -40,6 +40,12 @@ compactProjectSummary(
 \item{project.tags}{the tags for the project}
 
 \item{submission.type}{the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE}
+
+\item{lab.PIs}{The principal investigators of the project}
+
+\item{submitters}{The person/people who submitted the project}
+
+\item{affiliations}{The groups the "lab.PIs" and "submitters" are affiliated with}
 }
 \description{
 Constructor for compactProjectSummary

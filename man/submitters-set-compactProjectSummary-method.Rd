@@ -9,7 +9,7 @@
 \S4method{submitters}{compactProjectSummary}(object) <- value
 }
 \arguments{
-\item{object}{a compactProjectSummary}
+\item{object}{a ProjectSummary}
 
 \item{value}{submitters}
 }
@@ -21,5 +21,5 @@ Replaces the submitters
 \author{
 Jose A. Dianes
 
-Jose A. Dianes
+Tremayne Booker
 }

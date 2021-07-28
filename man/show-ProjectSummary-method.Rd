@@ -7,7 +7,7 @@
 \S4method{show}{ProjectSummary}(object)
 }
 \arguments{
-\item{object}{a given ProjectSummary}
+\item{object}{a given ProjectSummary to be printed}
 }
 \description{
 Show the print-out version of the content in a ProjectSummary

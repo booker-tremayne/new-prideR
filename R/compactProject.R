@@ -96,7 +96,7 @@ setClass(
 
 #' Constructor for compactProjectSummary
 #'
-#' @param accession project accession
+#' @param accession project accession - equivalent to project ID
 #' @param project.title the title of the project
 #' @param project.description the description of the project
 #' @param publication.date the date when the project was made public by PRIDE
@@ -106,6 +106,9 @@ setClass(
 #' @param instruments the names of the instruments used in the project
 #' @param project.tags the tags for the project
 #' @param submission.type the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE
+#' @param lab.PIs The principal investigators of the project
+#' @param submitters The person/people who submitted the project
+#' @param affiliations The groups the "lab.PIs" and "submitters" are affiliated with
 compactProjectSummary <- function(accession,
                            project.title,
                            project.description,

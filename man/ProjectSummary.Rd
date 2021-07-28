@@ -31,6 +31,10 @@ ProjectSummary(
 
 \item{project.description}{the description of the project}
 
+\item{sample.processing.protocol}{the protocol that was used to gather the data}
+
+\item{data.processing.protocol}{the protocol that was used to process the data}
+
 \item{publication.date}{the date when the project was made public by PRIDE}
 
 \item{organisms}{the organisms of the project}
@@ -44,6 +48,12 @@ ProjectSummary(
 \item{project.tags}{the tags for the project}
 
 \item{submission.type}{the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE}
+
+\item{lab.PIs}{the principal investigators of the project}
+
+\item{submitters}{the person/people who submitted the project}
+
+\item{affiliations}{the groups the "lab.PIs" and "submitters" are affiliated with}
 }
 \description{
 Constructor for ProjectSummary
