@@ -7,7 +7,7 @@
 \method{print}{ProteinDetail}(object)
 }
 \arguments{
-\item{object}{is the PeptideDetail to be printed}
+\item{object}{The PeptideDetail to be printed}
 }
 \description{
 Prints ProteinDetail

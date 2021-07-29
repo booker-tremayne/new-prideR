@@ -15,15 +15,19 @@ search.FileDetail(
 )
 }
 \arguments{
-\item{project.list}{the list of projects the user wishes to search the files through}
+\item{project.list}{The list of projects the user wishes to search the files through}
 
-\item{keywords}{the word or words the user is searching for in files}
+\item{keywords}{The word or words the user is searching for in files}
 
-\item{file.size.min}{is the lower range of file memory size the user can specify}
+\item{filetype}{The category of file. Categories are described by Pride}
 
-\item{file.size.max}{is the upper range of file memory size the user can specify}
+\item{file.size.min}{The lower range of file memory size}
 
-\item{all}{TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR}
+\item{file.size.max}{The upper range of file memory size}
+
+\item{all}{Determines whether the to match using ALL or ANY logic. Defaults to ANY}
+
+\item{use.regex}{Determines whether the keywords are regex patterns or should be matched literally}
 }
 \value{
 the FileDetailList list of successful matches

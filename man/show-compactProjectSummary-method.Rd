@@ -7,7 +7,7 @@
 \S4method{show}{compactProjectSummary}(object)
 }
 \arguments{
-\item{object}{a given compactProjectSummary}
+\item{object}{The given compactProjectSummary}
 }
 \description{
 Show the print-out version of the content in a compactProjectSummary

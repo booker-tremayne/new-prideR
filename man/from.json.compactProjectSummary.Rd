@@ -8,13 +8,7 @@ this is specifically for the search function as the JSON is formatted differentl
 from.json.compactProjectSummary(json.object)
 }
 \arguments{
-\item{json_str}{The JSON object}
-
-\item{file}{the name of a file to read the json_str from; this can also be a URL. Only one of json_str or file must be supplied.}
-
-\item{method}{use the C implementation, or the older slower (and one day to be depricated) R implementation}
-
-\item{unexpected.escape}{changed handling of unexpected escaped characters. Handling value should be one of "error", "skip", or "keep"; on unexpected characters issue an error, skip the character, or keep the character}
+\item{json.object}{The JSON object from Pride to be made into a compactProjectSummary}
 }
 \value{
 The compactProjectSummary instance
@@ -27,5 +21,5 @@ this is specifically for the search function as the JSON is formatted differentl
 TODO
 }
 \author{
-Jose A. Dianes
+Tremayne Booker
 }

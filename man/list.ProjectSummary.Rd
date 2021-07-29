@@ -7,7 +7,9 @@
 list.ProjectSummary(page.size = 10, page.number = 0)
 }
 \arguments{
-\item{count}{the maximum number of projects}
+\item{page.size}{The number of projects from Pride put into the ProjectSummary list. Limit is 100}
+
+\item{page.number}{The number of the page retrieved from Pride}
 }
 \value{
 The list of ProjectSummary objects

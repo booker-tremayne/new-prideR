@@ -11,8 +11,8 @@ compactProjectSummary(
   publication.date,
   organisms,
   organism.parts,
-  identified.ptm.strings,
   instruments,
+  diseases,
   project.tags,
   submission.type,
   lab.PIs,
@@ -21,25 +21,25 @@ compactProjectSummary(
 )
 }
 \arguments{
-\item{accession}{project accession - equivalent to project ID}
+\item{accession}{The project accession - equivalent to project ID}
 
-\item{project.title}{the title of the project}
+\item{project.title}{The title of the project}
 
-\item{project.description}{the description of the project}
+\item{project.description}{The description of the project}
 
-\item{publication.date}{the date when the project was made public by PRIDE}
+\item{publication.date}{The date when the project was made public by PRIDE}
 
-\item{organisms}{the organisms of the project}
+\item{organisms}{The organisms of the project}
 
-\item{organism.parts}{the organism.parts of the project}
+\item{organism.parts}{The organism.parts of the project}
 
-\item{identified.ptm.strings}{the names of the PTM for the project}
+\item{instruments}{The names of the instruments used in the project}
 
-\item{instruments}{the names of the instruments used in the project}
+\item{diseases}{The diseases analyzed in the project}
 
-\item{project.tags}{the tags for the project}
+\item{project.tags}{The tags for the project}
 
-\item{submission.type}{the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE}
+\item{submission.type}{The type of the submission, e.g. COMPLETE, PARTIAL or PRIDE}
 
 \item{lab.PIs}{The principal investigators of the project}
 

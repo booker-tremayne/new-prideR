@@ -7,10 +7,10 @@
 get.list.PeptideDetail(page.size = 10)
 }
 \arguments{
-\item{page.size}{is the number of proteins returned from Pride}
+\item{page.size}{The number of peptides from Pride put into the PeptideDetail list}
 }
 \value{
-the list of protein details
+The list of protein details
 }
 \description{
 Returns a list of peptides from Pride

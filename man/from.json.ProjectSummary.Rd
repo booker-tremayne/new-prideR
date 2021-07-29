@@ -7,7 +7,7 @@
 from.json.ProjectSummary(json.object)
 }
 \arguments{
-\item{json.object}{The JSON object from Pride API}
+\item{json.object}{The JSON object from Pride to be made into a ProjectSummary}
 }
 \value{
 The ProjectSummary instance
@@ -19,5 +19,5 @@ Returns a ProjectSummary instance from a JSON string representation
 TODO
 }
 \author{
-Jose A. Dianes
+Tremayne Booker
 }

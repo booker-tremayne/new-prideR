@@ -8,9 +8,7 @@ MISSING_VALUE_LIST <- list(list("accession" = "Not Available",
 
 #' Returns a ProteinDetail from the corresponding json object
 #'
-#'@param Accession the project accession
-#'@param ProteinSequence the Protein Sequence
-#'@param ProteinGroupMembers the protein Group members
+#'@param json.object The JSON object from Pride to be made into a ProteinDetail
 #'@author Tremayne Booker
 #'@details i dunno
 #'@importFrom rjson fromJSON
@@ -33,7 +31,7 @@ ProteinDetail <- function(json.object){
 
 #' Prints ProteinDetail
 #'
-#' @param object is the PeptideDetail to be printed
+#' @param object The PeptideDetail to be printed
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export
@@ -63,8 +61,8 @@ print.ProteinDetail <- function(object){
 
 #' Returns a list of protein from Pride
 #'
-#'@param page.size is the number of proteins returned from Pride
-#'@return the list of protein details
+#'@param page.size The number of proteins from Pride put into the ProteinDetail list
+#'@return the list of ProteinDetails
 #'@author Tremayne Booker
 #'@details i dunno
 #'@importFrom rjson fromJSON
@@ -77,8 +75,11 @@ get.list.ProteinDetail <- function(page.size = 10){
 
 #' Returns a list of proteins from a specific project from Pride
 #'
-#'@param accession is the project accession
-#'@return the list of protein details
+#'@param accession The project accession
+#'@param page.size The number of proteins from Pride put into the ProteinDetail list
+#'@param page.number The number of the page retrieved from Pride
+#'@param sort.direction The direction Pride returns the proteins. Can be either DESC (descending) or ASC (ascending)
+#'@return The list of protein details
 #'@author Tremayne Booker
 #'@details i dunno
 #'@importFrom rjson fromJSON

@@ -7,10 +7,10 @@
 get.ProjectSummary(accession)
 }
 \arguments{
-\item{accession}{The project accession}
+\item{accession}{The project accession to be retrieved}
 }
 \value{
-The project in as object
+The project as a ProjectSummary
 }
 \description{
 Returns a PRIDE Archive project

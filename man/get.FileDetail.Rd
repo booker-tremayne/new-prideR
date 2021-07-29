@@ -7,10 +7,10 @@
 get.FileDetail(project.accession)
 }
 \arguments{
-\item{project.accession}{the project accession}
+\item{project.accession}{The project accession}
 }
 \value{
-The list of FileDetail objects
+The list of FileDetail objects of the project
 }
 \description{
 Returns a list of PRIDE Archive files associated with a project

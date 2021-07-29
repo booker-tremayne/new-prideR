@@ -135,7 +135,10 @@ if (!isGeneric("affiliations<-")) {
   setGeneric("affiliations<-", function(object, value) standardGeneric("affiliations<-"))
 }
 
-#File Generics
+
+
+#FileDetail related Generics
+
 if (!isGeneric("project.accession")) {
   setGeneric("project.accession", function(object) standardGeneric("project.accession"))
 }

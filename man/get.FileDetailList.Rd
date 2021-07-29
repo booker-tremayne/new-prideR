@@ -7,10 +7,10 @@
 get.FileDetailList(project.list)
 }
 \arguments{
-\item{project.accession}{the project accession}
+\item{project.list}{The list of ProjectSummary objects to be made into a FileDetailList}
 }
 \value{
-The FileDetailList
+The FileDetailList of all the projects in the project.list
 }
 \description{
 Returns a FileDetailList for each of the projects given to it in project.list

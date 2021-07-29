@@ -9,9 +9,8 @@ Authors@R:
 Description: Includes classes and functions to retrieve project, file, peptide,
     and protein meta data from the Pride Archive. Utilizes the Pride API which
     can be found here: https://www.ebi.ac.uk/pride/ws/archive/v2/swagger-ui.html.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
-Imports: rjson
+License: GPL-3
+Depends: R (>= 3.0.0), methods, rjson
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

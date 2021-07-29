@@ -9,9 +9,9 @@ get.similar.projects(accession, page.size = 10, page.number = 0)
 \arguments{
 \item{accession}{Project accession to find similar projects of}
 
-\item{page.size}{The size of the pages returned}
+\item{page.size}{The number of projects from Pride put into the compactProjectSummary list. Limit is 100}
 
-\item{page.number}{The page to be viewed}
+\item{page.number}{The number of the page retrieved from Pride}
 }
 \value{
 The list of similar projects

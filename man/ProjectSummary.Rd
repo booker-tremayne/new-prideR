@@ -41,9 +41,13 @@ ProjectSummary(
 
 \item{organism.parts}{the organism.parts of the project}
 
+\item{diseases}{the diseases of the project}
+
 \item{identified.ptm.strings}{the names of the PTM for the project}
 
 \item{instruments}{the names of the instruments used in the project}
+
+\item{quantification.methods}{the quantification methods of the project}
 
 \item{project.tags}{the tags for the project}
 

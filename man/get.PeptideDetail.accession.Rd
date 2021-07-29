@@ -12,7 +12,13 @@ get.PeptideDetail.accession(
 )
 }
 \arguments{
-\item{accession}{is the project accession}
+\item{accession}{The project accession}
+
+\item{page.size}{The number of peptides from Pride put into the PeptideDetail list}
+
+\item{page.number}{The number of the page retrieved from Pride}
+
+\item{sort.direction}{The direction Pride returns the proteins. Can be either DESC (descending) or ASC (ascending)}
 }
 \value{
 the list of protein details

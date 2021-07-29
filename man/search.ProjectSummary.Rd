@@ -11,20 +11,40 @@ search.ProjectSummary(
   page.size = 10,
   page.number = 0,
   sort.direction = "DESC",
-  all = FALSE,
-  filters = ""
+  organism = "",
+  organism.part = "",
+  instrument = "",
+  disease = "",
+  modification = "",
+  project.tag = "",
+  project.keyword = "",
+  country = ""
 )
 }
 \arguments{
 \item{keywords}{The query term or terms}
 
-\item{page.size}{The maximum number of search results}
+\item{page.size}{The number of projects from Pride put into the compactProjectSummary list. Limit is 100}
 
-\item{page.number}{The page of the list}
+\item{page.number}{The number of the page retrieved from Pride}
 
-\item{sort.direction}{the direction the list is sorted by}
+\item{sort.direction}{The direction the list is sorted by. Can be DESC (descending) or ASC (ascending)}
 
-\item{and}{Whether the keywords should be matched using AND logic or OR logic}
+\item{organism}{The filterable field organism}
+
+\item{organism.part}{The filterable field organism.part}
+
+\item{instrument}{The filterable field instrument}
+
+\item{disease}{The filterable field disease}
+
+\item{modification}{The filterable field modification. Referred to as "identified PTM strings" elsewhere in package. Note that it is not present in the compactProjectSummary}
+
+\item{project.tag}{The filterable field project tag. Referred to as "tags" elsewhere in package}
+
+\item{project.keyword}{The filterable field project keyword. Not the same as the argument "keywords". This field are keywords submitters specified to include in their project}
+
+\item{country}{The filterable field country. Note that it is not present in the compactProjectSummary}
 }
 \value{
 The search results in a list of objects

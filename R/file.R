@@ -7,9 +7,7 @@ format.FileDetail <- function(x, ...) paste0(x@file.name, ", ", x@project.access
 
 #' FileDetailList represents a list of FileDetails organized by their associated project
 #'
-#' @param ProjectSummary is the file(s) associated project
-#' @param FileDetailList is the list of file details that are within the project
-#' @param file.count is the amount of files associated with the project
+#' @param ProjectSummary The file(s) associated project
 #' @author Tremayne Booker
 #' @export
 FileDetailList <- function(ProjectSummary){
@@ -232,10 +230,7 @@ setReplaceMethod("download.link", "FileDetail",
 
 #' Returns a FileDetail instance from a JSON string representation
 #'
-#' @param json_str The JSON object
-#' @param file the name of a file to read the json_str from; this can also be a URL. Only one of json_str or file must be supplied.
-#' @param method use the C implementation, or the older slower (and one day to be depricated) R implementation
-#' @param unexpected.escape changed handling of unexpected escaped characters. Handling value should be one of "error", "skip", or "keep"; on unexpected characters issue an error, skip the character, or keep the character
+#' @param json.object The JSON object to be made into a FileDetail object
 #' @return The AssayDetail instance
 #' @author Jose A. Dianes
 #' @details TODO
@@ -265,8 +260,8 @@ from.json.FileDetail <- function(json.object) {
 
 #' Returns a list of PRIDE Archive files associated with a project
 #'
-#' @param project.accession the project accession
-#' @return The list of FileDetail objects
+#' @param project.accession The project accession
+#' @return The list of FileDetail objects of the project
 #' @author Jose A. Dianes
 #' @details TODO
 #' @importFrom rjson fromJSON
@@ -279,8 +274,8 @@ get.FileDetail <- function(project.accession) {
 
 #' Returns a FileDetailList for each of the projects given to it in project.list
 #'
-#' @param project.accession the project accession
-#' @return The FileDetailList
+#' @param project.list The list of ProjectSummary objects to be made into a FileDetailList
+#' @return The FileDetailList of all the projects in the project.list
 #' @author Tremayne Booker
 #' @details TODO
 #' @export
@@ -305,11 +300,13 @@ get.FileDetail.by.name <- function(file.name){
 
 #' Searches a list of projects for keyword matches
 #'
-#' @param project.list the list of projects the user wishes to search the files through
-#' @param keywords the word or words the user is searching for in files
-#' @param all TRUE/FALSE whether the user wants to match using AND or OR. Defaults to OR
-#' @param file.size.min is the lower range of file memory size the user can specify
-#' @param file.size.max is the upper range of file memory size the user can specify
+#' @param project.list The list of projects the user wishes to search the files through
+#' @param keywords The word or words the user is searching for in files
+#' @param filetype The category of file. Categories are described by Pride
+#' @param file.size.min The lower range of file memory size
+#' @param file.size.max The upper range of file memory size
+#' @param all Determines whether the to match using ALL or ANY logic. Defaults to ANY
+#' @param use.regex Determines whether the keywords are regex patterns or should be matched literally
 #' @return the FileDetailList list of successful matches
 #' @author Tremayne Booker
 #' @details TODO
@@ -326,14 +323,19 @@ search.FileDetail <- function(project.list, keywords = "", filetype = " ", file.
 }
 
 
-#' Extension of search.project.list if the user would like AND matches
+#' The function that determines whether the project has successfully matching files
 #'
-#' @param project.list the list of projects the user wishes to search the files through
-#' @param keywords the word or words the user is searching for in files
+#' @param project The project to search the files through
+#' @param keywords The word or words the user is searching for in files
+#' @param filetype The category of file. Categories are described by Pride
+#' @param file.size.min The lower range of file memory size
+#' @param file.size.max The upper range of file memory size
+#' @param all Determines whether the to match using ALL or ANY logic. Defaults to ANY
+#' @param use.regex Determines whether the keywords are regex patterns or should be matched literally
 #' @return the project list of successful matches
 #' @author Tremayne Booker
 #' @details i dunno
-search.FileDetail.loop <- function(project, keywords, all, filetype, file.size.min, file.size.max, use.regex){
+search.FileDetail.loop <- function(project, keywords = "", filetype = " ", file.size.min = 0, file.size.max = 99999999999, all = FALSE, use.regex = FALSE){
   matches <- 0
   for (word in keywords){
     word <- tolower(word)
@@ -342,10 +344,10 @@ search.FileDetail.loop <- function(project, keywords, all, filetype, file.size.m
     for (file in project$file.list){
       file.name <- tolower(file@file.name)
 
-      if(!all &                                                                     # Checks whether or not it should use ALL logic or ANY logic
-         grepl(word, file.name, fixed = use.regex) &                           # Checks if a keyword matches the file name
-         (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &    # Checks if the file is within the file size requirement
-         (filetype == " " | file@file.type == filetype)){                           # Checks if the file matches the file type requirement
+      if(!all &                                                                            # Checks whether or not it should use ALL logic or ANY logic
+         grepl(word, file.name, fixed = use.regex) &                                       # Checks if a keyword matches the file name
+         (file@file.bytes >= file.size.min & file@file.bytes <= file.size.max) &           # Checks if the file is within the file size requirement
+         (filetype == " " | file@file.type == filetype)){                                  # Checks if the file matches the file type requirement
         return(project)
       }
       else if(all &
@@ -384,8 +386,8 @@ download.files.from.accession <- function(project.accession, file.dir){
 
 #' Downloads all projects from given project list
 #'
-#' @param project.accession is the project to be searched for
-#' @param file.dir is the directory the file is to be downloaded at
+#' @param project.list The project list to be searched for
+#' @param file.dir The directory the file is to be downloaded at
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export

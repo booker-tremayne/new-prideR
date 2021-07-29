@@ -1,8 +1,8 @@
 pride_archive_url <- "http://www.ebi.ac.uk/pride/ws/archive/v2"
 pride_archive_url_dev <- "http://wwwdev.ebi.ac.uk/pride/ws/archive/v2"
 
-MISSING_VALUE <- "Not available"
-MISSING_VALUE_LIST <- list(list( "name" = "Not available", "accession" = "Not available",
+MISSING_VALUE <- "Not Available"
+MISSING_VALUE_LIST_FULL <- list(list( "name" = "Not available", "accession" = "Not available",
                                  "title" = "Not available", "email" = "Not available", "affiliation" = "Not available"))
 
 #' ProjectSummary represents a PRIDE Archive project dataset
@@ -37,16 +37,16 @@ setClass(
     sample.processing.protocol = MISSING_VALUE,
     data.processing.protocol = MISSING_VALUE,
     publication.date = Sys.time(),
-    organisms = MISSING_VALUE_LIST,
-    organism.parts = MISSING_VALUE_LIST,
-    diseases = MISSING_VALUE_LIST,
-    identified.ptm.strings = MISSING_VALUE_LIST,
-    instruments = MISSING_VALUE_LIST,
-    quantification.methods = MISSING_VALUE_LIST,
+    organisms = MISSING_VALUE_LIST_FULL,
+    organism.parts = MISSING_VALUE_LIST_FULL,
+    diseases = MISSING_VALUE_LIST_FULL,
+    identified.ptm.strings = MISSING_VALUE_LIST_FULL,
+    instruments = MISSING_VALUE_LIST_FULL,
+    quantification.methods = MISSING_VALUE_LIST_FULL,
     project.tags = MISSING_VALUE,
     submission.type = MISSING_VALUE,
-    lab.PIs = MISSING_VALUE_LIST,
-    submitters = MISSING_VALUE_LIST,
+    lab.PIs = MISSING_VALUE_LIST_FULL,
+    submitters = MISSING_VALUE_LIST_FULL,
     affiliations = MISSING_VALUE
   ),
   validity = function(object) {
@@ -130,8 +130,10 @@ setClass(
 #' @param publication.date the date when the project was made public by PRIDE
 #' @param organisms the organisms of the project
 #' @param organism.parts the organism.parts of the project
+#' @param diseases the diseases of the project
 #' @param identified.ptm.strings the names of the PTM for the project
 #' @param instruments the names of the instruments used in the project
+#' @param quantification.methods the quantification methods of the project
 #' @param project.tags the tags for the project
 #' @param submission.type the type of the submission, e.g. COMPLETE, PARTIAL or PRIDE
 #' @param lab.PIs the principal investigators of the project
@@ -177,7 +179,7 @@ ProjectSummary <- function(accession,
 
 #' Show the print-out version of the content in a ProjectSummary
 #'
-#' @param object a given ProjectSummary to be printed
+#' @param object the ProjectSummary to be printed
 #' @export
 setMethod("show",
           signature = "ProjectSummary",
@@ -619,9 +621,9 @@ format.ProjectSummary <- function(x, ...) paste0(x@accession, ", ", x@title)
 
 #' Returns a ProjectSummary instance from a JSON string representation
 #'
-#' @param json.object The JSON object from Pride API
+#' @param json.object The JSON object from Pride to be made into a ProjectSummary
 #' @return The ProjectSummary instance
-#' @author Jose A. Dianes
+#' @author Tremayne Booker
 #' @details TODO
 #' @importFrom rjson fromJSON
 from.json.ProjectSummary <- function(json.object) {
@@ -632,16 +634,16 @@ from.json.ProjectSummary <- function(json.object) {
              sample.processing.protocol = ifelse(is.null(json.object$sampleProcessingProtocol) || (length(json.object$sampleProcessingProtocol)==0), MISSING_VALUE, json.object$sampleProcessingProtocol),
              data.processing.protocol = ifelse(is.null(json.object$dataProcessingProtocol) || (length(json.object$dataProcessingProtocol)==0), MISSING_VALUE, json.object$dataProcessingProtocol),
              publication.date = as.POSIXct(json.object$publicationDate),
-             organisms = if(is.null(json.object$organisms) || (length(json.object$organisms)==0)) MISSING_VALUE_LIST else json.object$organisms,
-             diseases = if(is.null(json.object$diseases) || (length(json.object$diseases)==0)) MISSING_VALUE_LIST else json.object$diseases,
-             organism.parts = if(is.null(json.object$organismParts) || (length(json.object$organismParts)==0)) MISSING_VALUE_LIST else json.object$organismParts,
-             identified.ptm.strings = if(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0)) MISSING_VALUE_LIST else json.object$identifiedPTMStrings,
-             instruments = if(is.null(json.object$instruments) || (length(json.object$instruments)==0)) MISSING_VALUE_LIST else json.object$instruments,
-             quantification.methods = if(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0)) MISSING_VALUE_LIST else json.object$quantificationMethods,
+             organisms = if(is.null(json.object$organisms) || (length(json.object$organisms)==0)) MISSING_VALUE_LIST_FULL else json.object$organisms,
+             diseases = if(is.null(json.object$diseases) || (length(json.object$diseases)==0)) MISSING_VALUE_LIST_FULL else json.object$diseases,
+             organism.parts = if(is.null(json.object$organismParts) || (length(json.object$organismParts)==0)) MISSING_VALUE_LIST_FULL else json.object$organismParts,
+             identified.ptm.strings = if(is.null(json.object$identifiedPTMStrings) || (length(json.object$identifiedPTMStrings)==0)) MISSING_VALUE_LIST_FULL else json.object$identifiedPTMStrings,
+             instruments = if(is.null(json.object$instruments) || (length(json.object$instruments)==0)) MISSING_VALUE_LIST_FULL else json.object$instruments,
+             quantification.methods = if(is.null(json.object$quantificationMethods) || (length(json.object$quantificationMethods)==0)) MISSING_VALUE_LIST_FULL else json.object$quantificationMethods,
              project.tags = ifelse(is.null(json.object$projectTags) || (length(json.object$projectTags)==0), MISSING_VALUE, json.object$projectTags),
              submission.type = ifelse(is.null(json.object$submissionType), MISSING_VALUE, json.object$submissionType),
-             lab.PIs = if(is.null(json.object$labPIs) || (length(json.object$labPIs)==0)) MISSING_VALUE_LIST else json.object$labPIs,
-             submitters = if(is.null(json.object$submitters) || (length(json.object$submitters)==0)) MISSING_VALUE_LIST else json.object$submitters,
+             lab.PIs = if(is.null(json.object$labPIs) || (length(json.object$labPIs)==0)) MISSING_VALUE_LIST_FULL else json.object$labPIs,
+             submitters = if(is.null(json.object$submitters) || (length(json.object$submitters)==0)) MISSING_VALUE_LIST_FULL else json.object$submitters,
              affiliations = ifelse(is.null(json.object$affiliations) || (length(json.object$submitters) == 0), MISSING_VALUE, json.object$affiliations)
   )
 
@@ -650,8 +652,8 @@ from.json.ProjectSummary <- function(json.object) {
 
 #' Returns a PRIDE Archive project
 #'
-#' @param accession The project accession
-#' @return The project in as object
+#' @param accession The project accession to be retrieved
+#' @return The project as a ProjectSummary
 #' @author Jose A. Dianes
 #' @details TODO
 #' @importFrom rjson fromJSON
@@ -662,7 +664,8 @@ get.ProjectSummary <- function(accession) {
 
 #' Returns a list of PRIDE Archive project summaries
 #'
-#' @param count the maximum number of projects
+#' @param page.size The number of projects from Pride put into the ProjectSummary list. Limit is 100
+#' @param page.number The number of the page retrieved from Pride
 #' @return The list of ProjectSummary objects
 #' @author Jose A. Dianes
 #' @details TODO

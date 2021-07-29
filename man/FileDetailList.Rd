@@ -7,11 +7,7 @@
 FileDetailList(ProjectSummary)
 }
 \arguments{
-\item{ProjectSummary}{is the file(s) associated project}
-
-\item{FileDetailList}{is the list of file details that are within the project}
-
-\item{file.count}{is the amount of files associated with the project}
+\item{ProjectSummary}{The file(s) associated project}
 }
 \description{
 FileDetailList represents a list of FileDetails organized by their associated project

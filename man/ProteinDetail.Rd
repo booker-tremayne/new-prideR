@@ -7,11 +7,7 @@
 ProteinDetail(json.object)
 }
 \arguments{
-\item{Accession}{the project accession}
-
-\item{ProteinSequence}{the Protein Sequence}
-
-\item{ProteinGroupMembers}{the protein Group members}
+\item{json.object}{The JSON object from Pride to be made into a ProteinDetail}
 }
 \description{
 Returns a ProteinDetail from the corresponding json object

@@ -2,28 +2,38 @@
 % Please edit documentation in R/file.R
 \name{search.FileDetail.loop}
 \alias{search.FileDetail.loop}
-\title{Extension of search.project.list if the user would like AND matches}
+\title{The function that determines whether the project has successfully matching files}
 \usage{
 search.FileDetail.loop(
   project,
-  keywords,
-  all,
-  filetype,
-  file.size.min,
-  file.size.max,
-  use.regex
+  keywords = "",
+  filetype = " ",
+  file.size.min = 0,
+  file.size.max = 99999999999,
+  all = FALSE,
+  use.regex = FALSE
 )
 }
 \arguments{
-\item{keywords}{the word or words the user is searching for in files}
+\item{project}{The project to search the files through}
 
-\item{project.list}{the list of projects the user wishes to search the files through}
+\item{keywords}{The word or words the user is searching for in files}
+
+\item{filetype}{The category of file. Categories are described by Pride}
+
+\item{file.size.min}{The lower range of file memory size}
+
+\item{file.size.max}{The upper range of file memory size}
+
+\item{all}{Determines whether the to match using ALL or ANY logic. Defaults to ANY}
+
+\item{use.regex}{Determines whether the keywords are regex patterns or should be matched literally}
 }
 \value{
 the project list of successful matches
 }
 \description{
-Extension of search.project.list if the user would like AND matches
+The function that determines whether the project has successfully matching files
 }
 \details{
 i dunno
