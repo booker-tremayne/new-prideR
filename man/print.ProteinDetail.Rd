@@ -4,10 +4,12 @@
 \alias{print.ProteinDetail}
 \title{Prints ProteinDetail}
 \usage{
-\method{print}{ProteinDetail}(object)
+\method{print}{ProteinDetail}(x, ...)
 }
 \arguments{
-\item{object}{The PeptideDetail to be printed}
+\item{x}{The PeptideDetail to be printed}
+
+\item{...}{unused}
 }
 \description{
 Prints ProteinDetail

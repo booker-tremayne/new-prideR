@@ -29,28 +29,29 @@ PeptideDetail <- function(json.object){
 
 #' Prints PeptideDetail
 #'
-#' @param object The PeptideDetail to be printed
+#' @param x The PeptideDetail to be printed
+#' @param ... unused
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export
-print.PeptideDetail <- function(object){
-  cat("An object of class ", class(object), "\n", sep="")
-  cat("   Accession: ", object$accession, "\n", sep="")
-  cat("   Peptide Sequence: ", object$peptide.sequence, "\n", sep="")
-  cat("   Protein Accession: ", object$protein.accession, "\n", sep="")
-  cat("   Missed Cleavages: ", object$missed.cleavages, "\n", sep="")
+print.PeptideDetail <- function(x, ...){
+  cat("An object of class ", class(x), "\n", sep="")
+  cat("   Accession: ", x$accession, "\n", sep="")
+  cat("   Peptide Sequence: ", x$peptide.sequence, "\n", sep="")
+  cat("   Protein Accession: ", x$protein.accession, "\n", sep="")
+  cat("   Missed Cleavages: ", x$missed.cleavages, "\n", sep="")
   cat("   Properties: ", "\n", sep="")
-  for(val in object$properties){
+  for(val in x$properties){
     cat("     ", val$name, "   |   Value: ", val$value, "\n", sep="")
     cat("        Accession: ", val$accession, "\n", sep="")
   }
   cat("   Quality Methods: ", "\n", sep="")
-  for(val in object$quality.methods){
+  for(val in x$quality.methods){
     cat("     ", val$name, "   |   Value: ", val$value, "\n", sep="")
     cat("        Accession: ", val$accession, "\n", sep="")
   }
   cat("   PTMs: ", "\n", sep="")
-  for(val in object$ptms){
+  for(val in x$ptms){
     cat("     ", val$name, "   |   Value: ", val$value, "\n", sep="")
     cat("        Accession: ", val$accession, "\n", sep="")
   }

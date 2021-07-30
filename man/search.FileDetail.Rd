@@ -36,7 +36,13 @@ the FileDetailList list of successful matches
 Searches a list of projects for keyword matches
 }
 \details{
-TODO
+This functionality is not built natively into the Pride web service.
+Searching through a ProjectSummary list will take a long time.
+For multiple searches on the same ProjectSummary list, it is recommended to create
+FileDetailList first, then search through that. This can be done by inputting the
+ProjectSummary list into "get.FileDetailList()".
+While this function can accept ProjectSummaries, it will always return a FileDetailList.
+This is to ensure recursive searches are faster.
 }
 \author{
 Tremayne Booker

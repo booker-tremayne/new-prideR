@@ -24,14 +24,15 @@ FileDetailList <- function(ProjectSummary){
 
 #' Print out FileDetailList object
 #'
-#' @param object a FileDetailList object
+#' @param x The FileDetailList object to be printed
+#' @param ... unused
 #' @author Tremayne Booker
 #' @export
-print.FileDetailList <- function(object) {
-            cat("An object of class ", class(object), sep="")
-            cat(" Containing ", object$file.count, " files", "\n", sep="")
+print.FileDetailList <- function(x, ...) {
+            cat("An object of class ", class(x), sep="")
+            cat(" Containing ", x$file.count, " files", "\n", sep="")
             cat("   Associated Project: ", "\n", sep="")
-            print(object$project)
+            print(x$project)
             cat("\n")
           }
 
@@ -231,15 +232,11 @@ setReplaceMethod("download.link", "FileDetail",
 #' Returns a FileDetail instance from a JSON string representation
 #'
 #' @param json.object The JSON object to be made into a FileDetail object
-#' @return The AssayDetail instance
-#' @author Jose A. Dianes
-#' @details TODO
+#' @return The FileDetail instance
+#' @author Tremayne Booker
+#' @details Pride files contain two download links. This package can only download
+#'          from the FTP protocol, so it only stores the download link for the FTP Protocol.
 #' @importFrom rjson fromJSON
-#  removed assay
-#  changed fileType to fileCategory
-#  changed fileSize to fileSizeBytes
-#  changed downloadLink to publicFileLocations
-#  removed file.source
 from.json.FileDetail <- function(json.object) {
   if(json.object$publicFileLocations[[1]]$name == "FTP Protocol"){
     download.link.1 <- json.object$publicFileLocations[[1]]$value
@@ -309,11 +306,16 @@ get.FileDetail.by.name <- function(file.name){
 #' @param use.regex Determines whether the keywords are regex patterns or should be matched literally
 #' @return the FileDetailList list of successful matches
 #' @author Tremayne Booker
-#' @details TODO
+#' @details This functionality is not built natively into the Pride web service.
+#'          Searching through a ProjectSummary list will take a long time.
+#'          For multiple searches on the same ProjectSummary list, it is recommended to create
+#'          FileDetailList first, then search through that. This can be done by inputting the
+#'          ProjectSummary list into "get.FileDetailList()".
+#'          While this function can accept ProjectSummaries, it will always return a FileDetailList.
+#'          This is to ensure recursive searches are faster.
 #' @export
 search.FileDetail <- function(project.list, keywords = "", filetype = " ", file.size.min = 0, file.size.max = 99999999999, all = FALSE, use.regex = FALSE){
   new.project.list <- vector("list", length(project.list))
-  matches <- 0
   if (class(project.list[[1]]) != "FileDetailList") {
     project.list <- lapply(project.list, function(x) { FileDetailList(x)})
   }
@@ -387,9 +389,10 @@ download.files.from.accession <- function(project.accession, file.dir){
 #' Downloads all projects from given project list
 #'
 #' @param project.list The project list to be searched for
-#' @param file.dir The directory the file is to be downloaded at
+#' @param file.dir The directory the file is downloaded at
 #' @author Tremayne Booker
-#' @details i dunno
+#' @details The file directory must exist already.
+#'          This will create a folder for each project within the given directory.
 #' @export
 download.files.from.project.list <- function(project.list, file.dir){
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")

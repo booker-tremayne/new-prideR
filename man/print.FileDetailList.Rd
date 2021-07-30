@@ -4,10 +4,12 @@
 \alias{print.FileDetailList}
 \title{Print out FileDetailList object}
 \usage{
-\method{print}{FileDetailList}(object)
+\method{print}{FileDetailList}(x, ...)
 }
 \arguments{
-\item{object}{a FileDetailList object}
+\item{x}{The FileDetailList object to be printed}
+
+\item{...}{unused}
 }
 \description{
 Print out FileDetailList object

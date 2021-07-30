@@ -1,3 +1,4 @@
+#' @import methods
 # ProjectSummary related generics
 if (!isGeneric("accession")) {
   setGeneric("accession", function(object) standardGeneric("accession"))

@@ -479,9 +479,7 @@ from.json.compactProjectSummary <- function(json.object) {
 }
 
 
-#' Returns a series of PRIDE Archive projects
-#' to satisfy a given query. This is actually a
-#' query filtered version of project_list
+#' Returns a series of PRIDE Archive projects to satisfy a given query.
 #'
 #' @param keywords The query term or terms
 #' @param page.size The number of projects from Pride put into the compactProjectSummary list. Limit is 100
@@ -493,11 +491,16 @@ from.json.compactProjectSummary <- function(json.object) {
 #' @param disease The filterable field disease
 #' @param modification The filterable field modification. Referred to as "identified PTM strings" elsewhere in package. Note that it is not present in the compactProjectSummary
 #' @param project.tag The filterable field project tag. Referred to as "tags" elsewhere in package
-#' @param project.keyword The filterable field project keyword. Not the same as the argument "keywords". This field are keywords submitters specified to include in their project
+#' @param project.keyword The filterable field project keyword. Not the same as the parameter "keywords". This field are keywords submitters specified to include in their project
 #' @param country The filterable field country. Note that it is not present in the compactProjectSummary
 #' @return The search results in a list of objects
-#' @author Jose A. Dianes
-#' @details TODO
+#' @author Tremayne Booker
+#' @details "Keywords" searched for search through every piece of metadata in the project for matches. It can accept multiple words as a character vector
+#'          They are also matched using ANY logic, meaning that if a keyword is present anywhere in the project
+#'          it will return that project even if other keywords are missing.
+#'          All parameters after "sort.direction" are filters that only check their respective fields for matches.
+#'          The filters must be matched exactly how they appear in the meta data, otherwise it will not return projects correctly.
+#'          For example, if you enter "Coloncancer" instead of "Colon cancer" it will not return any projects. It is not case sensitive, though.
 #' @importFrom rjson fromJSON
 #' @export
 search.ProjectSummary <- function(keywords = "", page.size=10, page.number = 0, sort.direction = "DESC", organism = "", organism.part = "", instrument = "", disease = "", modification = "", project.tag = "", project.keyword = "", country = "") {
@@ -528,7 +531,6 @@ search.ProjectSummary <- function(keywords = "", page.size=10, page.number = 0, 
 #' @param field is the field to be filtered
 #' @param url.string is the subset of the url for the filter
 #' @author Tremayne Booker
-#' @details TODO
 create.filter <- function(value, field, url.string){
   url.string <- paste0(url.string, field, value, ",")
   return(url.string)

@@ -9,13 +9,14 @@ download.files.from.project.list(project.list, file.dir)
 \arguments{
 \item{project.list}{The project list to be searched for}
 
-\item{file.dir}{The directory the file is to be downloaded at}
+\item{file.dir}{The directory the file is downloaded at}
 }
 \description{
 Downloads all projects from given project list
 }
 \details{
-i dunno
+The file directory must exist already.
+This will create a folder for each project within the given directory.
 }
 \author{
 Tremayne Booker

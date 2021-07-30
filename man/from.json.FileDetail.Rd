@@ -10,14 +10,15 @@ from.json.FileDetail(json.object)
 \item{json.object}{The JSON object to be made into a FileDetail object}
 }
 \value{
-The AssayDetail instance
+The FileDetail instance
 }
 \description{
 Returns a FileDetail instance from a JSON string representation
 }
 \details{
-TODO
+Pride files contain two download links. This package can only download
+from the FTP protocol, so it only stores the download link for the FTP Protocol.
 }
 \author{
-Jose A. Dianes
+Tremayne Booker
 }

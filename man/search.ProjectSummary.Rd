@@ -2,9 +2,7 @@
 % Please edit documentation in R/compactProject.R
 \name{search.ProjectSummary}
 \alias{search.ProjectSummary}
-\title{Returns a series of PRIDE Archive projects
-to satisfy a given query. This is actually a
-query filtered version of project_list}
+\title{Returns a series of PRIDE Archive projects to satisfy a given query.}
 \usage{
 search.ProjectSummary(
   keywords = "",
@@ -42,7 +40,7 @@ search.ProjectSummary(
 
 \item{project.tag}{The filterable field project tag. Referred to as "tags" elsewhere in package}
 
-\item{project.keyword}{The filterable field project keyword. Not the same as the argument "keywords". This field are keywords submitters specified to include in their project}
+\item{project.keyword}{The filterable field project keyword. Not the same as the parameter "keywords". This field are keywords submitters specified to include in their project}
 
 \item{country}{The filterable field country. Note that it is not present in the compactProjectSummary}
 }
@@ -50,13 +48,16 @@ search.ProjectSummary(
 The search results in a list of objects
 }
 \description{
-Returns a series of PRIDE Archive projects
-to satisfy a given query. This is actually a
-query filtered version of project_list
+Returns a series of PRIDE Archive projects to satisfy a given query.
 }
 \details{
-TODO
+"Keywords" searched for search through every piece of metadata in the project for matches. It can accept multiple words as a character vector
+They are also matched using ANY logic, meaning that if a keyword is present anywhere in the project
+it will return that project even if other keywords are missing.
+All parameters after "sort.direction" are filters that only check their respective fields for matches.
+The filters must be matched exactly how they appear in the meta data, otherwise it will not return projects correctly.
+For example, if you enter "Coloncancer" instead of "Colon cancer" it will not return any projects. It is not case sensitive, though.
 }
 \author{
-Jose A. Dianes
+Tremayne Booker
 }

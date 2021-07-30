@@ -16,9 +16,6 @@ create.filter(value, field, url.string)
 \description{
 Creates the url for all of the specified filters
 }
-\details{
-TODO
-}
 \author{
 Tremayne Booker
 }
