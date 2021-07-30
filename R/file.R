@@ -377,12 +377,12 @@ search.FileDetail.loop <- function(project, keywords = "", filetype = " ", file.
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export
-download.files.from.accession <- function(project.accession, file.dir){
+download.by.accession <- function(project.accession, file.dir){
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
   file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   for(val in file.list){
     print(val)
-    download.fileDetail(val, file.dir)
+    download.by.fileDetail(val, file.dir)
   }
 }
 
@@ -394,12 +394,12 @@ download.files.from.accession <- function(project.accession, file.dir){
 #' @details The file directory must exist already.
 #'          This will create a folder for each project within the given directory.
 #' @export
-download.files.from.project.list <- function(project.list, file.dir){
+download.project.list <- function(project.list, file.dir){
   json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
   file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   for(project in project.list){
     directory <- paste0(file.dir, "/", project@project.title)
-    download.files.from.accession(project@accession, directory)
+    download.by.accession(project@accession, directory)
   }
 }
 
@@ -409,8 +409,9 @@ download.files.from.project.list <- function(project.list, file.dir){
 #' @param file.dir is the directory the file is to be downloaded at
 #' @author Tremayne Booker
 #' @details i dunno
+#' @importFrom utils download.file
 #' @export
-download.fileDetail <- function(file, file.dir){
+download.by.fileDetail <- function(file, file.dir){
   file.dir <- paste0(file.dir, "/", file@file.name)
   download.file(file@download.link, file.dir)
 }
@@ -422,7 +423,7 @@ download.fileDetail <- function(file, file.dir){
 #' @author Tremayne Booker
 #' @details i dunno
 #' @export
-download.file.by.name <- function(file.name, file.dir){
-  file <- search.file.by.name(file.name)
-  download.fileDetail(file, file.dir)
+download.by.name <- function(file.name, file.dir){
+  file <- get.FileDetail.by.name(file.name)
+  download.by.fileDetail(file, file.dir)
 }
