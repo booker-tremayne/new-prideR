@@ -23,6 +23,15 @@ NewprideR allows for exploring the Pride archive through R. NewprideR has classe
 All metadata received is obtained through the Pride Swagger UI API, which can be found here:  https://www.ebi.ac.uk/pride/ws/archive/v2/swagger-ui.html
 
 
+# Installation
+First install the package devtools if not installed already, then use `install_github()`.
+```
+install.package("devtools")
+library(devtools)
+install_github("booker-tremayne/new-prideR")
+```
+
+
 # Basic Use
 
 
