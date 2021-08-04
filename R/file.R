@@ -316,11 +316,14 @@ get.FileDetail.by.name <- function(file.name){
 #' @export
 search.FileDetail <- function(project.list, keywords = "", filetype = " ", file.size.min = 0, file.size.max = 99999999999, all = FALSE, use.regex = FALSE){
   new.project.list <- vector("list", length(project.list))
+  if (class(project.list) != "list"){
+    project.list <- list(project.list)
+  }
   if (class(project.list[[1]]) != "FileDetailList") {
     project.list <- lapply(project.list, function(x) { FileDetailList(x)})
   }
   new.project.list <- lapply(project.list, search.FileDetail.loop, all = all, keywords = keywords, filetype = filetype, file.size.min = file.size.min, file.size.max = file.size.max, use.regex = use.regex)
-  new.project.list<-new.project.list[!sapply(new.project.list, is.null)]
+  new.project.list <- new.project.list[!sapply(new.project.list, is.null)]
   return(new.project.list)
 }
 

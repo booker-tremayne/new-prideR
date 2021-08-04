@@ -4,6 +4,7 @@ pride_archive_url_dev <- "http://wwwdev.ebi.ac.uk/pride/ws/archive/v2"
 MISSING_VALUE <- "Not Available"
 
 #' compactProjectSummary represents a PRIDE Archive project dataset
+#' @import methods
 #'
 #' @export
 #' @exportClass compactProjectSummary
@@ -507,9 +508,7 @@ search.ProjectSummary <- function(keywords = "", page.size=10, page.number = 0, 
   q <- ""
   f <- ""
 
-  for(word in keywords){
-    q <- paste0(q, "keyword=", word, "&")
-  }
+  q <- paste0("keyword=", keywords, "&", collapse = "")
 
   f <- lapply(organism, create.filter, "organisms==", f)
   f <- lapply(organism.part, create.filter, "organisms_part==", f)

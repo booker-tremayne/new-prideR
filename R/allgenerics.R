@@ -1,190 +1,150 @@
-#' @import methods
-# ProjectSummary related generics
-if (!isGeneric("accession")) {
-  setGeneric("accession", function(object) standardGeneric("accession"))
-}
+###ProjectSummary related generics
 
-if (!isGeneric("accession<-")) {
-  setGeneric("accession<-", function(object, value) standardGeneric("accession<-"))
-}
+#' Project Summary related generics
+#' @param object variable becomes an object
+#' @param value value to be set into the object
+#' @rdname projectgeneric
+setGeneric("accession", function(object) standardGeneric("accession"))
 
-if (!isGeneric("project.title")) {
-  setGeneric("project.title", function(object) standardGeneric("project.title"))
-}
+#' @rdname projectgeneric
+setGeneric("accession<-", function(object, value) standardGeneric("accession<-"))
 
-if (!isGeneric("project.title<-")) {
-  setGeneric("project.title<-", function(object, value) standardGeneric("project.title<-"))
-}
+#' @rdname projectgeneric
+setGeneric("project.title", function(object) standardGeneric("project.title"))
 
-if (!isGeneric("project.description")) {
-  setGeneric("project.description", function(object) standardGeneric("project.description"))
-}
+#' @rdname projectgeneric
+setGeneric("project.title<-", function(object, value) standardGeneric("project.title<-"))
 
-if (!isGeneric("project.description<-")) {
-  setGeneric("project.description<-", function(object, value) standardGeneric("project.description<-"))
-}
+#' @rdname projectgeneric
+setGeneric("project.description", function(object) standardGeneric("project.description"))
 
-if (!isGeneric("sample.processing.protocol")) {
-  setGeneric("sample.processing.protocol", function(object) standardGeneric("sample.processing.protocol"))
-}
+#' @rdname projectgeneric
+setGeneric("project.description<-", function(object, value) standardGeneric("project.description<-"))
 
-if (!isGeneric("sample.processing.protocol<-")) {
+#' @rdname projectgeneric
+setGeneric("sample.processing.protocol", function(object) standardGeneric("sample.processing.protocol"))
+
+#' @rdname projectgeneric
   setGeneric("sample.processing.protocol<-", function(object, value) standardGeneric("sample.processing.protocol<-"))
-}
 
-if (!isGeneric("data.processing.protocol")) {
-  setGeneric("data.processing.protocol", function(object) standardGeneric("data.processing.protocol"))
-}
+#' @rdname projectgeneric
+setGeneric("data.processing.protocol", function(object) standardGeneric("data.processing.protocol"))
 
-if (!isGeneric("data.processing.protocol<-")) {
-  setGeneric("data.processing.protocol<-", function(object, value) standardGeneric("data.processing.protocol<-"))
-}
+#' @rdname projectgeneric
+setGeneric("data.processing.protocol<-", function(object, value) standardGeneric("data.processing.protocol<-"))
 
-if (!isGeneric("publication.date")) {
-  setGeneric("publication.date", function(object) standardGeneric("publication.date"))
-}
+#' @rdname projectgeneric
+setGeneric("publication.date", function(object) standardGeneric("publication.date"))
 
-if (!isGeneric("publication.date<-")) {
-  setGeneric("publication.date<-", function(object, value) standardGeneric("publication.date<-"))
-}
+#' @rdname projectgeneric
+setGeneric("publication.date<-", function(object, value) standardGeneric("publication.date<-"))
 
-if (!isGeneric("organisms")) {
-  setGeneric("organisms", function(object) standardGeneric("organisms"))
-}
+#' @rdname projectgeneric
+setGeneric("organisms", function(object) standardGeneric("organisms"))
 
-if (!isGeneric("organisms<-")) {
-  setGeneric("organisms<-", function(object, value) standardGeneric("organisms<-"))
-}
+#' @rdname projectgeneric
+setGeneric("organisms<-", function(object, value) standardGeneric("organisms<-"))
 
-if (!isGeneric("organism.parts")) {
-  setGeneric("organism.parts", function(object) standardGeneric("organism.parts"))
-}
+#' @rdname projectgeneric
+setGeneric("organism.parts", function(object) standardGeneric("organism.parts"))
 
-if (!isGeneric("organism.parts<-")) {
-  setGeneric("organism.parts<-", function(object, value) standardGeneric("organism.parts<-"))
-}
+#' @rdname projectgeneric
+setGeneric("organism.parts<-", function(object, value) standardGeneric("organism.parts<-"))
 
-if (!isGeneric("diseases")) {
-  setGeneric("diseases", function(object) standardGeneric("diseases"))
-}
+#' @rdname projectgeneric
+setGeneric("diseases", function(object) standardGeneric("diseases"))
 
-if (!isGeneric("diseases<-")) {
-  setGeneric("diseases<-", function(object, value) standardGeneric("diseases<-"))
-}
+#' @rdname projectgeneric
+setGeneric("diseases<-", function(object, value) standardGeneric("diseases<-"))
 
-if (!isGeneric("identified.ptm.strings")) {
+#' @rdname projectgeneric
   setGeneric("identified.ptm.strings", function(object) standardGeneric("identified.ptm.strings"))
-}
 
-if (!isGeneric("identified.ptm.strings<-")) {
+#' @rdname projectgeneric
   setGeneric("identified.ptm.strings<-", function(object, value) standardGeneric("identified.ptm.strings<-"))
-}
 
-if (!isGeneric("instruments")) {
+#' @rdname projectgeneric
   setGeneric("instruments", function(object) standardGeneric("instruments"))
-}
 
-if (!isGeneric("instruments<-")) {
+#' @rdname projectgeneric
   setGeneric("instruments<-", function(object, value) standardGeneric("instruments<-"))
-}
 
-if (!isGeneric("quantification.methods")) {
+#' @rdname projectgeneric
   setGeneric("quantification.methods", function(object) standardGeneric("quantification.methods"))
-}
 
-if (!isGeneric("quantification.methods<-")) {
+#' @rdname projectgeneric
   setGeneric("quantification.methods<-", function(object, value) standardGeneric("quantification.methods<-"))
-}
 
-if (!isGeneric("project.tags")) {
+#' @rdname projectgeneric
   setGeneric("project.tags", function(object) standardGeneric("project.tags"))
-}
 
-if (!isGeneric("project.tags<-")) {
+#' @rdname projectgeneric
   setGeneric("project.tags<-", function(object, value) standardGeneric("project.tags<-"))
-}
 
-if (!isGeneric("submission.type")) {
+#' @rdname projectgeneric
   setGeneric("submission.type", function(object) standardGeneric("submission.type"))
-}
 
-if (!isGeneric("submission.type<-")) {
+#' @rdname projectgeneric
   setGeneric("submission.type<-", function(object, value) standardGeneric("submission.type<-"))
-}
 
-if (!isGeneric("lab.PIs")) {
+#' @rdname projectgeneric
   setGeneric("lab.PIs", function(object) standardGeneric("lab.PIs"))
-}
 
-if (!isGeneric("lab.PIs<-")) {
+#' @rdname projectgeneric
   setGeneric("lab.PIs<-", function(object, value) standardGeneric("lab.PIs<-"))
-}
 
-if (!isGeneric("submitters")) {
+#' @rdname projectgeneric
   setGeneric("submitters", function(object) standardGeneric("submitters"))
-}
 
-if (!isGeneric("submitters<-")) {
+#' @rdname projectgeneric
   setGeneric("submitters<-", function(object, value) standardGeneric("submitters<-"))
-}
 
-if (!isGeneric("affiliations")) {
+#' @rdname projectgeneric
   setGeneric("affiliations", function(object) standardGeneric("affiliations"))
-}
 
-if (!isGeneric("affiliations<-")) {
+#' @rdname projectgeneric
   setGeneric("affiliations<-", function(object, value) standardGeneric("affiliations<-"))
-}
 
 
+###FileDetail related Generics
 
-#FileDetail related Generics
+#' File Detail related generics
+#' @param object variable becomes an object
+#' @param value value to be set into the object
+#' @rdname filegeneric
+setGeneric("project.accession", function(object) standardGeneric("project.accession"))
 
-if (!isGeneric("project.accession")) {
-  setGeneric("project.accession", function(object) standardGeneric("project.accession"))
-}
+#' @rdname filegeneric
+setGeneric("project.accession<-", function(object, value) standardGeneric("project.accession<-"))
 
-if (!isGeneric("project.accession<-")) {
-  setGeneric("project.accession<-", function(object, value) standardGeneric("project.accession<-"))
-}
+#' @rdname filegeneric
+setGeneric("file.name", function(object) standardGeneric("file.name"))
 
-if (!isGeneric("file.name")) {
-  setGeneric("file.name", function(object) standardGeneric("file.name"))
-}
+#' @rdname filegeneric
+setGeneric("file.name<-", function(object, value) standardGeneric("file.name<-"))
 
-if (!isGeneric("file.name<-")) {
-  setGeneric("file.name<-", function(object, value) standardGeneric("file.name<-"))
-}
+#' @rdname filegeneric
+setGeneric("file.type", function(object) standardGeneric("file.type"))
 
-if (!isGeneric("file.type")) {
-  setGeneric("file.type", function(object) standardGeneric("file.type"))
-}
+#' @rdname filegeneric
+setGeneric("file.type<-", function(object, value) standardGeneric("file.type<-"))
 
-if (!isGeneric("file.type<-")) {
-  setGeneric("file.type<-", function(object, value) standardGeneric("file.type<-"))
-}
+#' @rdname filegeneric
+setGeneric("file.source", function(object) standardGeneric("file.source"))
 
-if (!isGeneric("file.source")) {
-  setGeneric("file.source", function(object) standardGeneric("file.source"))
-}
+#' @rdname filegeneric
+setGeneric("file.source<-", function(object, value) standardGeneric("file.source<-"))
 
-if (!isGeneric("file.source<-")) {
-  setGeneric("file.source<-", function(object, value) standardGeneric("file.source<-"))
-}
+#' @rdname filegeneric
+setGeneric("file.bytes", function(object) standardGeneric("file.bytes"))
 
-if (!isGeneric("file.bytes")) {
-  setGeneric("file.bytes", function(object) standardGeneric("file.bytes"))
-}
+#' @rdname filegeneric
+setGeneric("file.bytes<-", function(object, value) standardGeneric("file.bytes<-"))
 
-if (!isGeneric("file.bytes<-")) {
-  setGeneric("file.bytes<-", function(object, value) standardGeneric("file.bytes<-"))
-}
+#' @rdname filegeneric
+setGeneric("download.link", function(object) standardGeneric("download.link"))
 
-if (!isGeneric("download.link")) {
-  setGeneric("download.link", function(object) standardGeneric("download.link"))
-}
+#' @rdname filegeneric
+setGeneric("download.link<-", function(object, value) standardGeneric("download.link<-"))
 
-if (!isGeneric("download.link<-")) {
-  setGeneric("download.link<-", function(object, value) standardGeneric("download.link<-"))
-}
 
