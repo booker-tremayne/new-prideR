@@ -398,10 +398,9 @@ download.by.accession <- function(project.accession, file.dir){
 #'          This will create a folder for each project within the given directory.
 #' @export
 download.project.list <- function(project.list, file.dir){
-  json.list <- fromJSON(file=paste0(pride_archive_url, "/files/byProject?accession=", project.accession), method="C")
-  file.list <- lapply(json.list, function(x) { from.json.FileDetail(x)})
   for(project in project.list){
     directory <- paste0(file.dir, "/", project@project.title)
+    dir.create(directory)
     download.by.accession(project@accession, directory)
   }
 }
@@ -413,7 +412,6 @@ download.project.list <- function(project.list, file.dir){
 #' @author Tremayne Booker
 #' @details i dunno
 #' @importFrom utils download.file
-#' @export
 download.by.fileDetail <- function(file, file.dir){
   file.dir <- paste0(file.dir, "/", file@file.name)
   download.file(file@download.link, file.dir)

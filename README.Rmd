@@ -28,19 +28,19 @@ All metadata received is obtained through the Pride Swagger UI API, which can be
 
 ## Project Summaries
 
-Project Summaries is how meta data for projects are stored. 
+Project Summaries are how meta data for projects are stored. 
 
 `search.ProjectSummary()` is the function to search for projects across Pride. 
 It can accept:
 
   * __keywords__:  will return projects that feature the given word within the entire metadata
   * __filters__: which will only return projects that have a value in a given field
-  * __Various Sorting methods__: which can specify how many elements per page, which page, and whether all keywords need to be matched to return a project or any keyword.
+  * __page sorting__: specifies how many projects per page, which page accessed, and whether it will sort by ascending or descending order.
 
 For example:
 
 ```{r}
-project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 4, all = FALSE, filter = "instruments==LTQ Orbitrap")
+project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 4, instrument = "LTQ Orbitrap")
 project.list
 ```
 
@@ -75,12 +75,12 @@ It can accept:
   * __all/any logic__ : specifies whether a project must contain files with file names of every keyword or a single keyword
   * __use.regex__ : specifies whether they keyword given is to be interpreted as a regular expression or exactly.
 
-Note that this returns a list of FileDetailList objects. Also note that this is case sensitive.
+Note that this returns a list of FileDetailList objects.
 
 
 For example:
 ```{r}
-project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 19, all = FALSE, filter = "instruments==LTQ Orbitrap")
+project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 19, instrument = "LTQ Orbitrap")
 file.list <- search.FileDetail(project.list, keywords = c(".tif", ".ibd", ".imzml"), all = TRUE)
 file.list
 ```
@@ -119,10 +119,10 @@ protein.list
 
 # Example
 
-We wish to obtain the projects that can be analyzed with *Cardinal*. For this, we need projects that contain ".ibd" and ."imzml" files. First, we should obtain all projects that contain the word "imaging" or "msi". This is necessary since the file searching method is slow when searching across several projects.
+We wish to obtain the projects that can be analyzed with *Cardinal*. For this, we need projects that contain ".ibd" and ."imzml" files. First, we should obtain all projects that contain the word "imaging" or "msi". This is necessary since the file searching method is slow when searching across several projects. We also wish for all the results to be focused on breast cancer.
 
 ```{r}
-imaging.list <- search.ProjectSummary(c("imaging", "msi"), page.size = 100, filters = "Alzheimer&apos;s disease")
+imaging.list <- search.ProjectSummary(c("imaging", "msi"), page.size = 100, disease = "Breast cancer")
 ```
 
 Now, we must retrieve only projects containing the file extensions ".imzml" *and* ".ibd".
@@ -139,8 +139,8 @@ final.list <- search.FileDetail(successful.list, c(".jpg", ".jpeg", ".tif", ".pn
 final.list
 ```
 
-Now we may choose to download these projects.
+Now we may choose to download this/these projects.
 
 ```
-download.files.from.project.list(final.list, "/users/UserName/exampleDownload")
+download.project.list(final.list, "/users/UserName/exampleDownload")
 ```
