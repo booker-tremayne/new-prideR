@@ -49,6 +49,18 @@ For example:
 project.list <- search.ProjectSummary(keywords = "imaging", page.size = 2, page.number = 4, instrument = "LTQ Orbitrap")
 project.list
 #> [[1]]
+#> An object of class compactProjectSummary made public in 2020-04-03
+#>     Accession: PXD017056
+#>     Title: VESICULATION OF RED BLOOD CELLS IN THE BLOOD BANK: A MULTI-OMICS APPROACH TOWARDS IDENTIFICATION OF CAUSES AND CONSEQUENCES
+#>     Description: Microvesicle generation is an integral part of the aging process of red blood cells in vivo and in vitro. Extensive vesiculation impairs function and survival of red blood cells after transfusion, and microvesicles contribute to transfusion reactions. The triggers and mechanism of microvesicle generation are largely unknown. In this study, we combined morphological, immunochemical, proteomic, lipidomic and metabolomic analyses in order to obtain an integrated understanding of the mechanisms underlying microvesicle generation during storage of red blood cell concentrates. Our data indicate that changes in membrane organization, triggered by altered protein conformation, constitute the main mechanism of vesiculation, and precede changes in lipid organization. The resulting selective accumulation of membrane components in microvesicles is accompanied by the recruitment of plasma proteins involved in inflammation and coagulation. Our data may serve as a basis for further dissection of the fundamental mechanisms of red blood cell aging and vesiculation, for identifying the cause-effect relationship between blood bank storage and transfusion complications, and for assessing the role of microvesicles in pathologies affecting red blood cells.
+#>     Organisms: Homo sapiens (human)
+#>     Organism Parts: Blood cell
+#>     Instruments: Ltq orbitrap velos
+#>     Lab PIs: Giel Bosman
+#>     Submitters: Vikram Sharma
+#>     Affiliations: Department of Biochemistry (286) Radboud University Medical Centre Radboud Institute for Molecular Life Sciences  P.O. Box 9101 NL-6500 HB Nijmegen The Netherlands
+#> 
+#> [[2]]
 #> An object of class compactProjectSummary made public in 2020-01-07
 #>     Accession: PXD016570
 #>     Title: Plasma proteome profiling of freshwater and seawater life stages of rainbow trout (Oncorhynchus mykiss)
@@ -59,18 +71,6 @@ project.list
 #>     Lab PIs: Amaya Albalat
 #>     Submitters: Bernat Morro
 #>     Affiliations: Institute of Aquaculture, Stirling
-#> 
-#> [[2]]
-#> An object of class compactProjectSummary made public in 2019-11-06
-#>     Accession: PXD016146
-#>     Title: MALDI rat liver anticancer drug spiked-in dataset (imzML)
-#>     Description: For the MALDI-MSI experiment, we selected 12 different drugs. The drugs were purchased from the LC Laboratories (Woburn, MA; CAS numbers: dabrafenib: 1195765-45-7, dasatinib: 302962-49-8, erlotinib: 183321-74-6, gefitinib: 184475-35-2, imatinib: 152459-95-5, lapatinib: 388082-78-8, pazopanib: 444731-52-6, sorafenib: 284461-73-0, sunitinib: 557795-19-4, trametinib: 871700-17-3, vatalanib: 212141-54-3) and from SelleckChem (Munich, Germany; CAS numbers: ipratropium: 60205-81-4) with >99% purity and were dissolved in methanol (MeOH, (Chromasolv Plus for HPLC) (Sigma-Aldrich, Steinheim, Germany) at 10 mg/mL concentration. These stock solutions were further diluted with 50% MeOH and five mixtures were generated, each containing four different drug compounds. The spreadsheet in Supporting Information summarizes the composition of the five drug mixtures. A 5 mg/mL solution of a-cyano-4-hydroxycinnamic acid (CHCA, Sigma-Aldrich) dissolved in 50% MeOH containing 0.1% trifluoroacetic acid (TFA, Sigma-Aldrich, Steinheim, Germany) was used as matrix solution.
-#>     Organisms: Rattus norvegicus (rat)
-#>     Organism Parts: Liver
-#>     Instruments: Ltq orbitrap
-#>     Lab PIs: Peter Horvatovich
-#>     Submitters: Jonatan Eriksson
-#>     Affiliations: University of Groningen, Department of Analytical Biochemistry, Groningen Research Institute of Pharmacy, Antonius Deusinglaan 1, 9713 AV Groningen, The Netherlands  Lund University, Department of Biomedical Engineering, Lund, Sweden
 ```
 
 `get.ProjectSummary()` retrieves more detailed information regarding a
@@ -171,12 +171,15 @@ file.list
 #>     Affiliations: Institute of Inorganic and Analytical Chemistry, Justus Liebig University Giessen Schubertstrasse 60, D-35392 Giessen Germany
 ```
 
-`download.files.from.project()` downloads all files from a project.
-`download.fileDetail()` downloads a single file corresponding to a File
-Detail.
+`download.by.accession()` downloads all files from a project, accepting
+a project accession string. `download.project.list()` downloads all
+files from all projects in a project list, accepting a list of Project
+Summaries. Names for folders are created according to the project title.
+`download.by.name()` downloads a single file according to the file name.
 
 Note that `get.FileDetailList()` will be slow, and `search.FileDetail()`
-will be slow if given a Project Summary list and not a FileDetailList.
+will take a few minutes if given a Project Summary list and not a
+FileDetailList.
 
 ## Peptide Details
 

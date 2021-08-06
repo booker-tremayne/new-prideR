@@ -94,10 +94,11 @@ file.list <- search.FileDetail(project.list, keywords = c(".tif", ".ibd", ".imzm
 file.list
 ```
 
-`download.files.from.project()` downloads all files from a project.
-`download.fileDetail()` downloads a single file corresponding to a File Detail.
+`download.by.accession()` downloads all files from a project, accepting a project accession string.
+`download.project.list()` downloads all files from all projects in a project list, accepting a list of Project Summaries. Names for folders are created according to the project title.
+`download.by.name()` downloads a single file according to the file name.
 
-Note that `get.FileDetailList()` will be slow, and `search.FileDetail()` will be slow if given a Project Summary list and not a FileDetailList.
+Note that `get.FileDetailList()` will be slow, and `search.FileDetail()` will take a few minutes if given a Project Summary list and not a FileDetailList.
 
 ## Peptide Details
 
